@@ -11,7 +11,11 @@ namespace MyShulWorld.Controllers
     {
         //
         // GET: /Home/
-
+        public ActionResult EventEntry()
+        {
+            return View();
+        }
+    
 
         public ActionResult SubmitEventsForYear(string year)
         {

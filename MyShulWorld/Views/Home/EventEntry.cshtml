@@ -1,0 +1,138 @@
+﻿<link href="~/Content/EventEntry.css" rel="stylesheet" />
+
+<button id="test">test</button>
+<h1 style="text-align: left; margin-left: 350px">Enter A New Event</h1>
+<div class="well" style="width: 700px; text-align: center; background-color: #ffffe6
+; border-color:#003566; border-width: 3px; border-radius: 0px; margin-left: 150px">
+
+    @*<button id="test">Test</button>
+        <button id="test2">test 2</button>*@
+    <h4>Enter event name in the box below or hover</h4>
+    <h4>and click on arrow for a list to select from</h4>
+
+
+    <datalist id="events">
+        <option value="Shacharis">שחרית</option>
+        <option value="Mincha">מנחה</option>
+        <option value="Maariv">מעריב</option>
+        <option value="Sunrise">זריחה</option>
+        <option value="Sunset">שקיעה</option>
+        <option value="Chatzos">חצות</option>
+        <option value="Latest shema Magen Avraham">סוף זמן קריאת שמע - מ"א</option>
+        <option value="Latest shema Gra">סוף זמן קריאת שמע - גר"א</option>
+        <option value="Latest shachris Gra">סוף זמן תפילה</option>
+    </datalist>
+    <input type="text" style="width: 320px" id="event" list="events">
+    <hr style="border-color: darkcyan; border-style: dotted" />
+    <h4>Is this a recurring event or one time?</h4>
+    <form role="form">
+        <div class="radio-inline">
+            <label><input type="radio" name="isOneTime" value="recurring">Recurring</label>
+        </div>
+        <div class="radio-inline">
+            <label><input type="radio" name="isOneTime" value="once">One Time</label>
+        </div>
+    </form>
+    <br />
+    <div id="recurring">
+        <h4 style="text-align: left;margin-left: 155px">1. Choose the type of day you are entering:</h4>
+        <div style="text-align: left; width: 320px; margin-left: 173px">
+
+            <select name="types[]" multiple id="types">
+                <option value="regularDay">Day Of The Week</option>
+                <option value="Shabbos">Shabbos</option>
+                <option value="YomTov">Yom Tov</option>
+                <option value="RoshChodesh">Rosh Chodesh</option>
+                <option value="Taanis">Taanis</option>
+            </select>
+        </div>
+        <h4 style="text-align: left; margin-left: 155px; margin-top: 25px">2. On which days of the week will this occur?</h4>
+        <div style="text-align: left; width: 320px; margin-left: 173px">
+            <select name="days[]" multiple id="days">
+                <option value="Sunday">Sunday</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Shabbos">Shabbos</option>
+            </select>
+        </div>
+        <h4 style="text-align: left; margin-left: 155px; margin-top: 25px">3. Any exceptions to the adove?</h4>
+        <div style="text-align: left; width: 320px; margin-left: 173px">
+            <select name="exceptions[]" multiple id="exceptions">
+                <option value="Shabbos">Shabbos</option>
+                <option value="YomTov">Yom Tov</option>
+                <option value="RoshChodesh">Rosh Chodesh</option>
+                <option value="Taanis">Taanis</option>
+            </select>
+        </div>
+        <hr style="margin-left: 100px; margin-right: 100px; margin-bottom: 20px" />
+        <button class="btn btn-success btn-outline" id="btn-fromTo" style="margin-top: 0px">CLICK here to add a 'Start' and 'End' date for this event</button>
+        <div id="from-to" style="margin-top: 40px">
+            <div class="row">
+                <h4 style="display: inline">Start: </h4>
+                <input type="text" class="datepicker" id="from" style="text-align: center">
+                <h4 style="display: inline; margin-left: 40px">End: </h4>
+                <input type="text" class="datepicker" id="to" style="text-align: center">
+                <button class="btn btn-outline btn-danger btn-sm" id="clear" style="margin-left: 15px">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <div id="single-date">
+        <h4 style="display: inline">Enter the date: </h4>
+        <input type="text" class="datepicker" id="date" style="text-align: center">
+    </div>
+    <hr style="border-style: dotted" />
+    <h4>Does this event have a fixed time or is it based on another z'man?</h4>
+    <form role="form">
+        <div class="radio-inline">
+            <label><input type="radio" name="ifFixed" value="fixed">Fixed Time</label>
+        </div>
+        <div class="radio-inline">
+            <label><input type="radio" name="ifFixed" value="not-fixed">Based On Another Z'man</label>
+        </div>
+    </form>
+    <div id="time-pick" style="margin-top: 30px">
+        <h4>Enter the time for the event:</h4>
+        <div style="margin-left: 200px">
+            <input type="text" id="timepicker" name="timepicker" value="" class="timepicker form-control" style="width: 271px; border-radius: 0px; height: 30px; text-align: center" placeholder="hh : mm  am/pm">
+        </div>
+    </div>
+    <br />
+    <div id="based-on">
+        <h4>Select what you would like to base this event on:</h4>
+        <select style="height: 26px" id="based-on-select">
+            <option value="0">Shekia</option>
+            <option value="1">First zman krias shema</option>
+            <option value="2">Second zman krias shema</option>
+        </select>
+    </div>
+    <br />
+    <div id="minutes-difference" style="margin-bottom: 25px">
+        <h4>Enter the amount of minutes</h4>
+        <datalist id="difference">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="18">18</option>
+            <option value="30">30</option>
+        </datalist>
+        <input type="text" style="width: 60px; text-align: center" id="minutes" list="difference">
+        <h4 style="display: inline; margin-right: 20px">minutes</h4>
+        <label class="radio-inline"><input type="radio" class="beforeAfterRdo" name="beforeAfter" value="before">Before</label>
+        <label class="radio-inline"><input type="radio" class="beforeAfterRdo" name="beforeAfter" value="after">After</label>
+    </div>
+    <hr style="border-color: darkcyan; border-style: dotted" />
+
+    <button class="btn btn-primary btn-outline btn-lg" id="enter">
+        <h4>Submit Event</h4>
+    </button>
+</div>
+
+@section scripts{
+
+    <script src="~/Scripts/EventEntry.js"></script>
+}
+
+
