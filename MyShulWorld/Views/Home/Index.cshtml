@@ -1,0 +1,26 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "title";
+}
+<div id="calendar"></div>
+<div class="well">
+    <h2>Add Event Type:</h2>
+    <form method="POST" action="/home/submitEventType">
+        <input type="text" name="name" placeholder="Event Name:" />
+        <select class="selectpicker form-control" name="timeType">
+            <option>Set Time</option>
+            <option>Based on Something Else</option>
+        </select>
+        <input type="text" name="fixedTime" placeholder="Time:" />
+
+    </form>
+</div>
+
+@*@section Scripts{
+    <link rel='stylesheet' href='fullcalendar/fullcalendar.css' />
+    <script src='lib/jquery.min.js'></script>
+    <script src='lib/moment.min.js'></script>
+    <script src='fullcalendar/fullcalendar.js'></script>
+    <script src="~/Scripts/Index.js"></script>
+}*@

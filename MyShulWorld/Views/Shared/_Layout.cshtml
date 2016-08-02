@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <title>@ViewBag.Title</title>
+    
+</head>
+<body>
+    <div class="container"style="margin-top: 20px;">
+        @RenderBody()
+    </div>
+@Scripts.Render("~/bundles/jquery")
+
+    <link href="~/Content/fullcalendar.min.css" rel="stylesheet" />
+@*<script src='lib/jquery.min.js'></script>
+    <script src='lib/moment.min.js'></script>
+    <script src='fullcalendar/fullcalendar.js'></script>*@
+
+<script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/fullcalendar.min.js"></script>
+
+<script src="~/Scripts/Index.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+@RenderSection("scripts", required: false)
+</body>
+</html>

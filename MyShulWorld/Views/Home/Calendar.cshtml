@@ -1,0 +1,22 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "title";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jewish Calendar</title>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.5.0/fullcalendar.min.css" rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.5.0/fullcalendar.min.js"></script>
+    @*<link href="hebcal-styles.css" rel="stylesheet">*@
+    <link href="~/hebcal-styles.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="calendar"></div>
+    <script src="hebcal-fullcalendar.js"></script>
+</body>
+</html>
