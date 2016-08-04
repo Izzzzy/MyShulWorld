@@ -36,6 +36,12 @@ namespace Zmanim.Data
     partial void InsertEventType(EventType instance);
     partial void UpdateEventType(EventType instance);
     partial void DeleteEventType(EventType instance);
+    partial void InsertExclusion(Exclusion instance);
+    partial void UpdateExclusion(Exclusion instance);
+    partial void DeleteExclusion(Exclusion instance);
+    partial void InsertRestriction(Restriction instance);
+    partial void UpdateRestriction(Restriction instance);
+    partial void DeleteRestriction(Restriction instance);
     #endregion
 		
 		public MyShulWorldDBDataContext() : 
@@ -81,6 +87,22 @@ namespace Zmanim.Data
 			get
 			{
 				return this.GetTable<EventType>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Exclusion> Exclusions
+		{
+			get
+			{
+				return this.GetTable<Exclusion>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Restriction> Restrictions
+		{
+			get
+			{
+				return this.GetTable<Restriction>();
 			}
 		}
 	}
@@ -275,6 +297,10 @@ namespace Zmanim.Data
 		
 		private string _TypesOfDaysExcluded;
 		
+		private EntitySet<Exclusion> _Exclusions;
+		
+		private EntitySet<Restriction> _Restrictions;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -309,6 +335,8 @@ namespace Zmanim.Data
 		
 		public EventType()
 		{
+			this._Exclusions = new EntitySet<Exclusion>(new Action<Exclusion>(this.attach_Exclusions), new Action<Exclusion>(this.detach_Exclusions));
+			this._Restrictions = new EntitySet<Restriction>(new Action<Restriction>(this.attach_Restrictions), new Action<Restriction>(this.detach_Restrictions));
 			OnCreated();
 		}
 		
@@ -568,6 +596,358 @@ namespace Zmanim.Data
 					this._TypesOfDaysExcluded = value;
 					this.SendPropertyChanged("TypesOfDaysExcluded");
 					this.OnTypesOfDaysExcludedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EventType_Exclusion", Storage="_Exclusions", ThisKey="ID", OtherKey="EventTypeId")]
+		public EntitySet<Exclusion> Exclusions
+		{
+			get
+			{
+				return this._Exclusions;
+			}
+			set
+			{
+				this._Exclusions.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EventType_Restriction", Storage="_Restrictions", ThisKey="ID", OtherKey="EventTypeId")]
+		public EntitySet<Restriction> Restrictions
+		{
+			get
+			{
+				return this._Restrictions;
+			}
+			set
+			{
+				this._Restrictions.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Exclusions(Exclusion entity)
+		{
+			this.SendPropertyChanging();
+			entity.EventType = this;
+		}
+		
+		private void detach_Exclusions(Exclusion entity)
+		{
+			this.SendPropertyChanging();
+			entity.EventType = null;
+		}
+		
+		private void attach_Restrictions(Restriction entity)
+		{
+			this.SendPropertyChanging();
+			entity.EventType = this;
+		}
+		
+		private void detach_Restrictions(Restriction entity)
+		{
+			this.SendPropertyChanging();
+			entity.EventType = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Exclusions")]
+	public partial class Exclusion : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _Exclusion1;
+		
+		private int _EventTypeId;
+		
+		private EntityRef<EventType> _EventType;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnExclusion1Changing(string value);
+    partial void OnExclusion1Changed();
+    partial void OnEventTypeIdChanging(int value);
+    partial void OnEventTypeIdChanged();
+    #endregion
+		
+		public Exclusion()
+		{
+			this._EventType = default(EntityRef<EventType>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="Exclusion", Storage="_Exclusion1", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string Exclusion1
+		{
+			get
+			{
+				return this._Exclusion1;
+			}
+			set
+			{
+				if ((this._Exclusion1 != value))
+				{
+					this.OnExclusion1Changing(value);
+					this.SendPropertyChanging();
+					this._Exclusion1 = value;
+					this.SendPropertyChanged("Exclusion1");
+					this.OnExclusion1Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventTypeId", DbType="Int NOT NULL")]
+		public int EventTypeId
+		{
+			get
+			{
+				return this._EventTypeId;
+			}
+			set
+			{
+				if ((this._EventTypeId != value))
+				{
+					if (this._EventType.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnEventTypeIdChanging(value);
+					this.SendPropertyChanging();
+					this._EventTypeId = value;
+					this.SendPropertyChanged("EventTypeId");
+					this.OnEventTypeIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EventType_Exclusion", Storage="_EventType", ThisKey="EventTypeId", OtherKey="ID", IsForeignKey=true)]
+		public EventType EventType
+		{
+			get
+			{
+				return this._EventType.Entity;
+			}
+			set
+			{
+				EventType previousValue = this._EventType.Entity;
+				if (((previousValue != value) 
+							|| (this._EventType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._EventType.Entity = null;
+						previousValue.Exclusions.Remove(this);
+					}
+					this._EventType.Entity = value;
+					if ((value != null))
+					{
+						value.Exclusions.Add(this);
+						this._EventTypeId = value.ID;
+					}
+					else
+					{
+						this._EventTypeId = default(int);
+					}
+					this.SendPropertyChanged("EventType");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Restrictions")]
+	public partial class Restriction : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _Restriction1;
+		
+		private int _EventTypeId;
+		
+		private EntityRef<EventType> _EventType;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnRestriction1Changing(string value);
+    partial void OnRestriction1Changed();
+    partial void OnEventTypeIdChanging(int value);
+    partial void OnEventTypeIdChanged();
+    #endregion
+		
+		public Restriction()
+		{
+			this._EventType = default(EntityRef<EventType>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="Restriction", Storage="_Restriction1", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string Restriction1
+		{
+			get
+			{
+				return this._Restriction1;
+			}
+			set
+			{
+				if ((this._Restriction1 != value))
+				{
+					this.OnRestriction1Changing(value);
+					this.SendPropertyChanging();
+					this._Restriction1 = value;
+					this.SendPropertyChanged("Restriction1");
+					this.OnRestriction1Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventTypeId", DbType="Int NOT NULL")]
+		public int EventTypeId
+		{
+			get
+			{
+				return this._EventTypeId;
+			}
+			set
+			{
+				if ((this._EventTypeId != value))
+				{
+					if (this._EventType.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnEventTypeIdChanging(value);
+					this.SendPropertyChanging();
+					this._EventTypeId = value;
+					this.SendPropertyChanged("EventTypeId");
+					this.OnEventTypeIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EventType_Restriction", Storage="_EventType", ThisKey="EventTypeId", OtherKey="ID", IsForeignKey=true)]
+		public EventType EventType
+		{
+			get
+			{
+				return this._EventType.Entity;
+			}
+			set
+			{
+				EventType previousValue = this._EventType.Entity;
+				if (((previousValue != value) 
+							|| (this._EventType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._EventType.Entity = null;
+						previousValue.Restrictions.Remove(this);
+					}
+					this._EventType.Entity = value;
+					if ((value != null))
+					{
+						value.Restrictions.Add(this);
+						this._EventTypeId = value.ID;
+					}
+					else
+					{
+						this._EventTypeId = default(int);
+					}
+					this.SendPropertyChanged("EventType");
 				}
 			}
 		}

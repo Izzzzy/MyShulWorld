@@ -2,7 +2,7 @@
   'ajax': function() {
     /// <signature>
     ///   <summary>Perform an asynchronous HTTP (Ajax) request.</summary>
-    ///   <param name="url" type="String">A string containing the URL to which the request is sent.</param>
+    ///   <param name="Url" type="String">A string containing the URL to which the request is sent.</param>
     ///   <param name="settings" type="PlainObject">A set of key/value pairs that configure the Ajax request. All settings are optional. A default can be set for any option with $.ajaxSetup(). See jQuery.ajax( settings ) below for a complete list of all settings.</param>
     ///   <returns type="jqXHR" />
     /// </signature>
@@ -124,7 +124,7 @@
   'get': function() {
     /// <signature>
     ///   <summary>Load data from the server using a HTTP GET request.</summary>
-    ///   <param name="url" type="String">A string containing the URL to which the request is sent.</param>
+    ///   <param name="Url" type="String">A string containing the URL to which the request is sent.</param>
     ///   <param name="data" type="String">A plain object or string that is sent to the server with the request.</param>
     ///   <param name="success(data, textStatus, jqXHR)" type="Function">A callback function that is executed if the request succeeds.</param>
     ///   <param name="dataType" type="String">The type of data expected from the server. Default: Intelligent Guess (xml, json, script, or html).</param>
@@ -134,7 +134,7 @@
   'getJSON': function() {
     /// <signature>
     ///   <summary>Load JSON-encoded data from the server using a GET HTTP request.</summary>
-    ///   <param name="url" type="String">A string containing the URL to which the request is sent.</param>
+    ///   <param name="Url" type="String">A string containing the URL to which the request is sent.</param>
     ///   <param name="data" type="PlainObject">A plain object or string that is sent to the server with the request.</param>
     ///   <param name="success(data, textStatus, jqXHR)" type="Function">A callback function that is executed if the request succeeds.</param>
     ///   <returns type="jqXHR" />
@@ -143,7 +143,7 @@
   'getScript': function() {
     /// <signature>
     ///   <summary>Load a JavaScript file from the server using a GET HTTP request, then execute it.</summary>
-    ///   <param name="url" type="String">A string containing the URL to which the request is sent.</param>
+    ///   <param name="Url" type="String">A string containing the URL to which the request is sent.</param>
     ///   <param name="success(script, textStatus, jqXHR)" type="Function">A callback function that is executed if the request succeeds.</param>
     ///   <returns type="jqXHR" />
     /// </signature>
@@ -316,7 +316,7 @@
   'post': function() {
     /// <signature>
     ///   <summary>Load data from the server using a HTTP POST request.</summary>
-    ///   <param name="url" type="String">A string containing the URL to which the request is sent.</param>
+    ///   <param name="Url" type="String">A string containing the URL to which the request is sent.</param>
     ///   <param name="data" type="String">A plain object or string that is sent to the server with the request.</param>
     ///   <param name="success(data, textStatus, jqXHR)" type="Function">A callback function that is executed if the request succeeds.</param>
     ///   <param name="dataType" type="String">The type of data expected from the server. Default: Intelligent Guess (xml, json, script, text, html).</param>

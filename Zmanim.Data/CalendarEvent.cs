@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Zmanim.Data
 {
-    public class HebcalItems
+    public class CalendarEvent
     {
-        public Item[] Items { get; set; }
+        public string Title { get; set; }
+        public string Start { get; set; }
+        //public string Url { get; set; }
+
     }
 }

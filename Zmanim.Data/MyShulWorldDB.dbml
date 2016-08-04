@@ -24,6 +24,24 @@
       <Column Name="TypesOfDaysApplicable" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="DaysOfWeekApplicable" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="TypesOfDaysExcluded" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="EventType_Exclusion" Member="Exclusions" ThisKey="ID" OtherKey="EventTypeId" Type="Exclusion" />
+      <Association Name="EventType_Restriction" Member="Restrictions" ThisKey="ID" OtherKey="EventTypeId" Type="Restriction" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Exclusions" Member="Exclusions">
+    <Type Name="Exclusion">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Exclusion" Member="Exclusion1" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EventTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="EventType_Exclusion" Member="EventType" ThisKey="EventTypeId" OtherKey="ID" Type="EventType" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Restrictions" Member="Restrictions">
+    <Type Name="Restriction">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Restriction" Member="Restriction1" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EventTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="EventType_Restriction" Member="EventType" ThisKey="EventTypeId" OtherKey="ID" Type="EventType" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

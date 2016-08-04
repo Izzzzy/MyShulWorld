@@ -15,6 +15,18 @@ namespace MyShulWorld.Controllers
         {
             return View();
         }
+
+        public ActionResult GetEvents(string start,string end)
+        {
+            var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
+            var es = gr.GetEventsBetweenDates(start, end);
+            var nl= es.Select(p => new EventVM { start = p.Start, title = p.Title });
+            
+            return Json(nl, JsonRequestBehavior.AllowGet);
+
+            //var r = new List<EventVM>() { new EventVM { title = "birthday", start = "2016-08-21" }, { new EventVM { title = "happy", start = "2016-08-23" } } };
+            //return Json(r.ToArray(), JsonRequestBehavior.AllowGet);
+        }
     
 
         public ActionResult SubmitEventsForYear(string year)
@@ -34,7 +46,7 @@ namespace MyShulWorld.Controllers
         public ActionResult Index()
         {
             var gr=new GabbaiRepository(Properties.Settings.Default.ConStr);
-            //gr.PopulateShkiaFor30Days();
+            gr.PopulateShkiaFor30Days();
             return View();
         }
 

@@ -570,12 +570,12 @@ window.Modernizr = (function( window, document, undefined ) {
     tests['multiplebgs'] = function() {
         // Setting multiple images AND a color on the background shorthand property
         //  and then querying the style.background property value for the number of
-        //  occurrences of "url(" is a reliable method for detecting ACTUAL support for this!
+        //  occurrences of "Url(" is a reliable method for detecting ACTUAL support for this!
 
-        setCss('background:url(https://),url(https://),red url(https://)');
+        setCss('background:Url(https://),Url(https://),red Url(https://)');
 
         // If the UA supports multiple backgrounds, there should be three occurrences
-        //   of the string "url(" in the return value for elemStyle.background
+        //   of the string "Url(" in the return value for elemStyle.background
 
         return (/(url\s*\(.*?){3}/).test(mStyle.background);
     };
@@ -708,7 +708,7 @@ window.Modernizr = (function( window, document, undefined ) {
     tests['fontface'] = function() {
         var bool;
 
-        injectElementWithStyles('@font-face {font-family:"font";src:url("https://")}', function( node, rule ) {
+        injectElementWithStyles('@font-face {font-family:"font";src:Url("https://")}', function( node, rule ) {
           var style = document.getElementById('smodernizr'),
               sheet = style.sheet || style.styleSheet,
               cssText = sheet ? (sheet.cssRules && sheet.cssRules[0] ? sheet.cssRules[0].cssText : sheet.cssText || '') : '';
@@ -938,7 +938,7 @@ window.Modernizr = (function( window, document, undefined ) {
                       //  even make it here.
 
                     } else if ( /^(url|email)$/.test(inputElemType) ) {
-                      // Real url and email support comes with prebaked validation.
+                      // Real Url and email support comes with prebaked validation.
                       bool = inputElem.checkValidity && inputElem.checkValidity() === false;
 
                     } else {
@@ -950,7 +950,7 @@ window.Modernizr = (function( window, document, undefined ) {
                 inputs[ props[i] ] = !!bool;
             }
             return inputs;
-        })('search tel url email datetime date month week time datetime-local number range color'.split(' '));
+        })('search tel Url email datetime date month week time datetime-local number range color'.split(' '));
         /*>>inputtypes*/
     }
     /*>>webforms*/

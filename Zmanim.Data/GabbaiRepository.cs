@@ -22,19 +22,6 @@ namespace Zmanim.Data
         }
 
 
-        public void UpdateEvent(int eventId, Event e)
-        {
-            using (var context = new MyShulWorldDBDataContext(_connectionString))
-            {
-                Event a = context.Events.FirstOrDefault(i => i.Id == eventId);
-                a.EventName = e.EventName;
-                a.EventTypeId = e.EventTypeId;
-                a.Date = e.Date;
-                a.Time = e.Time;
-                context.SubmitChanges();
-            }
-        }
-
         public void UpdateEventType(int eventTypeId, EventType et)
         {
             using (var context = new MyShulWorldDBDataContext(_connectionString))
@@ -61,11 +48,15 @@ namespace Zmanim.Data
             }
         }
 
-        public void DeleteEvent(int eventId)
+        public void AddEventType(EventType eventType)
         {
+            if (eventType.StartDate == null)
+            {
+                eventType.StartDate = DateTime.Now;
+            }
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
-                context.Events.DeleteOnSubmit(GetEventById(eventId));
+                context.EventTypes.InsertOnSubmit(eventType);
                 context.SubmitChanges();
             }
         }
@@ -81,26 +72,6 @@ namespace Zmanim.Data
             }
         }
 
-        private EventType GetEventTypeById(int eventTypeId)
-        {
-            using (var context = new MyShulWorldDBDataContext(_connectionString))
-            {
-                return context.EventTypes.FirstOrDefault(et => et.ID == eventTypeId);
-            }
-        }
-
-        public void AddEventType(EventType eventType)
-        {
-            if (eventType.StartDate == null)
-            {
-                eventType.StartDate = DateTime.Now;
-            }
-            using (var context = new MyShulWorldDBDataContext(_connectionString))
-            {
-                context.EventTypes.InsertOnSubmit(eventType);
-                context.SubmitChanges();
-            }
-        }
 
         public void AddEvent(Event e)
         {
@@ -110,6 +81,38 @@ namespace Zmanim.Data
                 context.SubmitChanges();
             }
         }
+
+        public void DeleteEvent(int eventId)
+        {
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                context.Events.DeleteOnSubmit(GetEventById(eventId));
+                context.SubmitChanges();
+            }
+        }
+
+        public void UpdateEvent(int eventId, Event e)
+        {
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                Event a = context.Events.FirstOrDefault(i => i.Id == eventId);
+                a.EventName = e.EventName;
+                a.EventTypeId = e.EventTypeId;
+                a.Date = e.Date;
+                a.Time = e.Time;
+                context.SubmitChanges();
+            }
+        }
+
+
+        private EventType GetEventTypeById(int eventTypeId)
+        {
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                return context.EventTypes.FirstOrDefault(et => et.ID == eventTypeId);
+            }
+        }
+
 
         public string GetTimeBasedOnSomething(DateTime date, int? basedOn, double minutesDifference)
         {
@@ -144,16 +147,55 @@ namespace Zmanim.Data
             }
         }
 
+        //private void GenerateInsertionOfEventsForYear(string year, EventType eventType)
+        //{
+        //    HebcalItems items = new HebcalItems
+        //    {
+        //        Items = (Item[])GetItemsForYear(year)
+        //    };
+
+        //    for (DateTime x = DateTime.Parse(year + "/01/01"); x < DateTime.Parse(year + "/12/31"); x.AddDays(1))
+        //    {
+        //        if (IsApplicable(x, items.Items.FirstOrDefault(i => DateTime.Parse(i.Date) == x), eventType))
+        //        {
+        //            Event e = new Event
+        //            {
+        //                Date = x,
+        //                EventName = eventType.Name,
+        //                EventTypeId = eventType.ID,
+        //            };
+        //            //may be more performent to wrap this whole "for" loop (beginning line 97) in the following "if" statement and to repeat all the
+        //            //logic again in the following "else if" cuz then only has to check once
+        //            if (eventType.FixedTime != null)
+        //            {
+        //                e.Time = eventType.FixedTime;
+        //            }
+        //            else if (eventType.BasedOn != null)
+        //            {
+        //                double minutes = eventType.TimeDifference.Value;
+        //                e.Time = GetTimeBasedOnSomething(x, eventType.BasedOn, minutes);
+        //            }
+        //            AddEvent(e);
+        //        }
+        //    }
+        //    using (var context = new MyShulWorldDBDataContext(_connectionString))
+        //    {
+        //        //add the year to eventType.YearsPopulated
+        //        context.EventTypes.FirstOrDefault(e => e.ID == eventType.ID).YearsPopulated += year + ",";
+        //        context.SubmitChanges();
+        //    }
+        //}
+
         private void GenerateInsertionOfEventsForYear(string year, EventType eventType)
         {
-            HEBCALItems items = new HEBCALItems
+            HebcalItems items = new HebcalItems
             {
                 Items = (Item[])GetItemsForYear(year)
             };
-            
+
             for (DateTime x = DateTime.Parse(year + "/01/01"); x < DateTime.Parse(year + "/12/31"); x.AddDays(1))
             {
-                if (IsApplicable(x, items.Items.FirstOrDefault(i => DateTime.Parse(i.Date) == x), eventType))
+                if (IsApplicable(x, GetTypesOfDay(x,items.Items.Where(i => DateTime.Parse(i.Date) == x)) , eventType))
                 {
                     Event e = new Event
                     {
@@ -181,6 +223,11 @@ namespace Zmanim.Data
                 context.EventTypes.FirstOrDefault(e => e.ID == eventType.ID).YearsPopulated += year + ",";
                 context.SubmitChanges();
             }
+        }
+
+        private IEnumerable<Item> GetItemsForDate(DateTime d, HebcalItems items)
+        {
+            return items.Items.Where(i => DateTime.Parse(i.Date) == d);
         }
 
         private string GetTypeOfDay(Item ifd)
@@ -217,56 +264,101 @@ namespace Zmanim.Data
             return "RegularDay";
         }
 
-        private IEnumerable<string> GetTypesOfDay(Item ifd)
+        private IEnumerable<string> GetTypesOfDay(DateTime date, IEnumerable<Item> itemsForDate)
         {
             List<string> types = new List<string>();
-            if (ifd.YomTov && !ifd.Title.Contains("Rosh Hashana") && !ifd.Title.Contains("Yom Kippur"))
+            types.Add(date.DayOfWeek.ToString());
+            if (itemsForDate.Any(i => i.YomTov))
             {
-                types.Add("YomTov"); 
+                types.Add("YomTov");
             }
-            if (ifd.Category == "roshchodesh")
+            if (itemsForDate.Any(i => i.Category == "roshchodesh"))
             {
                 types.Add("RoshChodesh");
             }
-            if (ifd.Title.Contains("CH''M"))
+            if (itemsForDate.Any(i => i.Title.Contains("CH''M")))
             {
                 types.Add("CholHamoed");
             }
-            if (ifd.Title == "Yom Kippur")
+            if (itemsForDate.Any(i => i.Title == "Yom Kippur"))
             {
                 types.Add("YomKippur");
             }
-            if (ifd.Title == "Rosh Hashana")
+            if (itemsForDate.Any(i => i.Title == "Rosh Hashana"))
             {
                 types.Add("RoshHashana");
             }
-            if (ifd.Title == "Tish'a B'av")
+            if (itemsForDate.Any(i => i.Title == "Tish'a B'av"))
             {
                 types.Add("TishaB'av");
             }
             //might not be so efficient
-            if (ifd.Memo.Contains("fast") && ifd.Title != "Yom Kippur" && ifd.Title != "Tish'a B'av" && ifd.Memo != "Fast of the First Born")
+            if (itemsForDate.Any(i => i.Memo.Contains("fast") && i.Title != "Yom Kippur" && i.Title != "Tish'a B'av" && i.Memo != "Fast of the First Born"))
             {
                 types.Add("Taanis");
             }
             return types;
         }
 
-        private bool IsApplicable(DateTime date, Item itemForDate, EventType et)
+        //private bool IsApplicable(DateTime date, Item itemForDate, EventType et)
+        //{
+        //    if ((et.StartDate != null && date < et.StartDate) || (et.EndDate != null && date > et.EndDate))
+        //    {
+        //        return false;
+        //    }
+
+        //    if (itemForDate != null)
+        //    {
+        //        if (et.TypesOfDaysApplicable.Contains(GetTypeOfDay(itemForDate)))
+        //        {
+        //            return et.DaysOfWeekApplicable.Contains(date.DayOfWeek.ToString());
+        //        }
+        //    }
+        //    return et.Identifier.Contains(date.DayOfWeek.ToString());
+        //}
+
+        private bool IsApplicable(DateTime date, IEnumerable<string> typesOfDay, EventType et)
         {
             if ((et.StartDate != null && date < et.StartDate) || (et.EndDate != null && date > et.EndDate))
             {
                 return false;
             }
 
-            if (itemForDate != null)
+            List<Restriction> restrictions = new List<Restriction>();
+            List<Exclusion> exclusions = new List<Exclusion>();
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
-                if (et.TypesOfDaysApplicable.Contains(GetTypeOfDay(itemForDate)))
+                foreach(Restriction r in context.Restrictions.Where(r => r.EventTypeId == et.ID))
                 {
-                    return et.DaysOfWeekApplicable.Contains(date.DayOfWeek.ToString());
+                    restrictions.Add(r);
+                }
+                foreach (Exclusion e in context.Exclusions.Where(e => e.EventTypeId == et.ID))
+                {
+                    exclusions.Add(e);
                 }
             }
-            return et.Identifier.Contains(date.DayOfWeek.ToString());
+            if (restrictions.Any())
+            {
+                foreach (var r in restrictions)
+                {
+                    if (!typesOfDay.Any(tod => r.Restriction1.Contains(tod)))
+                    {
+                        return false;
+                    }
+                }
+            }
+            if (exclusions.Any())
+            {
+                foreach (var e in exclusions)
+                {
+                    if (!typesOfDay.Any(tod => e.Exclusion1.Contains(tod)))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return true;
         }
 
         private IEnumerable<Item> GetItemsForYear(string year)
@@ -280,6 +372,25 @@ namespace Zmanim.Data
             }
         }
 
+
+        public IEnumerable<CalendarEvent> GetEventsBetweenDates(string startDate, string endDate)
+        {
+            List<CalendarEvent> cEvents = new List<CalendarEvent>();
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                foreach (Event e in context.Events.Where(e => e.Date > DateTime.Parse(startDate) && e.Date < DateTime.Parse(endDate)))
+                {
+                    DateTime d = (DateTime)e.Date;
+                    cEvents.Add(new CalendarEvent
+                    {
+                        Title = e.EventName,
+                        Start = d.ToString("yyyy-MM-dd")
+
+                    });
+                }
+                return cEvents;
+            }
+        }
 
         public Event GetEventById(int eventId)
         {

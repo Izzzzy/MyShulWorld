@@ -66,7 +66,7 @@ interface JQueryAjaxSettings {
      */
     crossDomain?: boolean;
     /**
-     * Data to be sent to the server. It is converted to a query string, if not already a string. It's appended to the url for GET-requests. See processData option to prevent this automatic processing. Object must be Key/Value pairs. If value is an Array, jQuery serializes multiple values with same key based on the value of the traditional setting (described below).
+     * Data to be sent to the server. It is converted to a query string, if not already a string. It's appended to the Url for GET-requests. See processData option to prevent this automatic processing. Object must be Key/Value pairs. If value is an Array, jQuery serializes multiple values with same key based on the value of the traditional setting (described below).
      */
     data?: any;
     /**
@@ -98,7 +98,7 @@ interface JQueryAjaxSettings {
      */
     isLocal?: boolean;
     /**
-     * Override the callback function name in a jsonp request. This value will be used instead of 'callback' in the 'callback=?' part of the query string in the url. So {jsonp:'onJSONPLoad'} would result in 'onJSONPLoad=?' passed to the server. As of jQuery 1.5, setting the jsonp option to false prevents jQuery from adding the "?callback" string to the URL or attempting to use "=?" for transformation. In this case, you should also explicitly set the jsonpCallback setting. For example, { jsonp: false, jsonpCallback: "callbackName" }
+     * Override the callback function name in a jsonp request. This value will be used instead of 'callback' in the 'callback=?' part of the query string in the Url. So {jsonp:'onJSONPLoad'} would result in 'onJSONPLoad=?' passed to the server. As of jQuery 1.5, setting the jsonp option to false prevents jQuery from adding the "?callback" string to the URL or attempting to use "=?" for transformation. In this case, you should also explicitly set the jsonpCallback setting. For example, { jsonp: false, jsonpCallback: "callbackName" }
      */
     jsonp?: any;
     /**
@@ -632,7 +632,7 @@ interface JQueryStatic {
     /**
      * Perform an asynchronous HTTP (Ajax) request.
      *
-     * @param url A string containing the URL to which the request is sent.
+     * @param Url A string containing the URL to which the request is sent.
      * @param settings A set of key/value pairs that configure the Ajax request. All settings are optional. A default can be set for any option with $.ajaxSetup().
      */
     ajax(url: string, settings?: JQueryAjaxSettings): JQueryXHR;
@@ -663,7 +663,7 @@ interface JQueryStatic {
     /**
      * Load data from the server using a HTTP GET request.
      *
-     * @param url A string containing the URL to which the request is sent.
+     * @param Url A string containing the URL to which the request is sent.
      * @param success A callback function that is executed if the request succeeds.
      * @param dataType The type of data expected from the server. Default: Intelligent Guess (xml, json, script, or html).
      */
@@ -671,7 +671,7 @@ interface JQueryStatic {
     /**
      * Load data from the server using a HTTP GET request.
      *
-     * @param url A string containing the URL to which the request is sent.
+     * @param Url A string containing the URL to which the request is sent.
      * @param data A plain object or string that is sent to the server with the request.
      * @param success A callback function that is executed if the request succeeds.
      * @param dataType The type of data expected from the server. Default: Intelligent Guess (xml, json, script, or html).
@@ -686,14 +686,14 @@ interface JQueryStatic {
     /**
      * Load JSON-encoded data from the server using a GET HTTP request.
      *
-     * @param url A string containing the URL to which the request is sent.
+     * @param Url A string containing the URL to which the request is sent.
      * @param success A callback function that is executed if the request succeeds.
      */
     getJSON(url: string, success?: (data: any, textStatus: string, jqXHR: JQueryXHR) => any): JQueryXHR;
     /**
      * Load JSON-encoded data from the server using a GET HTTP request.
      *
-     * @param url A string containing the URL to which the request is sent.
+     * @param Url A string containing the URL to which the request is sent.
      * @param data A plain object or string that is sent to the server with the request.
      * @param success A callback function that is executed if the request succeeds.
      */
@@ -701,7 +701,7 @@ interface JQueryStatic {
     /**
      * Load a JavaScript file from the server using a GET HTTP request, then execute it.
      *
-     * @param url A string containing the URL to which the request is sent.
+     * @param Url A string containing the URL to which the request is sent.
      * @param success A callback function that is executed if the request succeeds.
      */
     getScript(url: string, success?: (script: string, textStatus: string, jqXHR: JQueryXHR) => any): JQueryXHR;
@@ -714,7 +714,7 @@ interface JQueryStatic {
     /**
      * Load data from the server using a HTTP POST request.
      *
-     * @param url A string containing the URL to which the request is sent.
+     * @param Url A string containing the URL to which the request is sent.
      * @param success A callback function that is executed if the request succeeds. Required if dataType is provided, but can be null in that case.
      * @param dataType The type of data expected from the server. Default: Intelligent Guess (xml, json, script, text, html).
      */
@@ -722,7 +722,7 @@ interface JQueryStatic {
     /**
      * Load data from the server using a HTTP POST request.
      *
-     * @param url A string containing the URL to which the request is sent.
+     * @param Url A string containing the URL to which the request is sent.
      * @param data A plain object or string that is sent to the server with the request.
      * @param success A callback function that is executed if the request succeeds. Required if dataType is provided, but can be null in that case.
      * @param dataType The type of data expected from the server. Default: Intelligent Guess (xml, json, script, text, html).
@@ -1217,7 +1217,7 @@ interface JQuery {
     /**
      * Load data from the server and place the returned HTML into the matched element.
      *
-     * @param url A string containing the URL to which the request is sent.
+     * @param Url A string containing the URL to which the request is sent.
      * @param data A plain object or string that is sent to the server with the request.
      * @param complete A callback function that is executed when the request completes.
      */
