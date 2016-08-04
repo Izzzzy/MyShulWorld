@@ -26,6 +26,8 @@ namespace Zmanim.Data
         {
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
+                var events = context.Events.Where(e => e.EventTypeId == eventTypeId && e.Date > DateTime.Now);
+                context.Events.DeleteAllOnSubmit(events);
                 EventType eventType = context.EventTypes.FirstOrDefault(e => e.ID == eventTypeId);
                 if (eventType != null)
                 {
@@ -43,8 +45,7 @@ namespace Zmanim.Data
                 }
 
                 context.SubmitChanges();
-                var events = context.Events.Where(e => e.EventTypeId == eventTypeId && e.Date > DateTime.Now);
-                context.Events.DeleteAllOnSubmit(events);
+
             }
         }
 

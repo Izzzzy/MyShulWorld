@@ -26,6 +26,8 @@
     $('#test').click(function () {
         //alert($('#from').val());
         endDateValidator();
+        $.post('/home/SubmitEvent', { eventName: eventChosen, date: oneDate, time: pickedTime, basedOn: basedOn, timeDifference: difference }
+            );
     });
     //$('#test2').click(function () {
     //    $('.uncheck').prop('checked', false);
@@ -88,10 +90,19 @@
         if ($('input[name=ifFixed]:checked').val() === 'fixed') {
             pickedTime = $('#timepicker').val();
             $('.beforeAfterRdo').prop('checked', false);
-        } else if ($('input[name=ifFixed]:checked').val() === "Based on another z'man") {
+        } else if ($('input[name=ifFixed]:checked').val() === "not-fixed") {
             basedOn = $('#based-on-select').val();
-            difference = $('#minutes').val();
+            if ($('input[name=beforeAfter]:checked').val() === 'before') {
+                difference = -$('#minutes').val();
+            } else {
+                difference = $('#minutes').val();
+            }
             beforeAfter = $('input[name=beforeAfter]:checked').val();
+        }
+        if ($('input[name=isOneTime]:checked').val() === 'once') {
+            alert('got in');
+            $.post('/home/SubmitEvent', { eventName: eventChosen, date: oneDate, time: pickedTime, basedOn: basedOn, timeDifference: difference }
+            );
         }
 
 

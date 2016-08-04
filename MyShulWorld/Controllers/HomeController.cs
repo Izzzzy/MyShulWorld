@@ -16,121 +16,70 @@ namespace MyShulWorld.Controllers
             return View();
         }
 
-        public ActionResult GetEvents(string start,string end)
+        public ActionResult Index()
+        {
+            var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
+            //gr.PopulateShkiaFor30Days();
+            return View();
+        }
+
+        public ActionResult GetEvents(string start, string end)
         {
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
             var es = gr.GetEventsBetweenDates(start, end);
-            var nl= es.Select(p => new EventVM { start = p.Start, title = p.Title });
-            
+            var nl = es.Select(p => new EventVM { start = p.Start, title = p.Title });
+
             return Json(nl, JsonRequestBehavior.AllowGet);
 
             //var r = new List<EventVM>() { new EventVM { title = "birthday", start = "2016-08-21" }, { new EventVM { title = "happy", start = "2016-08-23" } } };
             //return Json(r.ToArray(), JsonRequestBehavior.AllowGet);
         }
-    
+
 
         public ActionResult SubmitEventsForYear(string year)
         {
-            var gr=new GabbaiRepository(Properties.Settings.Default.ConStr);
-            gr.PopulateEventsForAYear(year,gr.GetAllEventTypes());
+            var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
+            gr.PopulateEventsForAYear(year, gr.GetAllEventTypes());
             return View();
         }
 
         public ActionResult SubmitDeleteEvent(int eventId)
         {
-            var gr=new GabbaiRepository(Properties.Settings.Default.ConStr);
+            var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
             gr.DeleteEvent(eventId);
             return View();
         }
-    
-        public ActionResult Index()
-        {
-            var gr=new GabbaiRepository(Properties.Settings.Default.ConStr);
-            gr.PopulateShkiaFor30Days();
-            return View();
-        }
 
-        public ActionResult SubmitEventEntry(bool recurring,string eventName,DateTime date,bool isFixed,string time,BasedOn basedOn,int timeDifference,string identifier,DateTime StartDate,DateTime EndDate)
-        {
-            var gr=new GabbaiRepository(Properties.Settings.Default.ConStr);
-            if (!recurring)
-            {
-                var e=new Event
-                {
-                    Date = date,
-                    EventName = eventName
-                };
-                if (isFixed)
-                {
-                    e.Time = time;
-                }
-                else
-                {
-                    e.Time = gr.GetTimeBasedOnSomething(date, (int?)basedOn, timeDifference);
-                }
-                gr.AddEvent(e);
-            }
-            else
-            {
-                var et=new EventType
-                {
-                    Name=eventName,
-                    Identifier=identifier,
-                    StartDate=StartDate,
-                    EndDate=EndDate
-                };
-                if (isFixed)
-                {
-                    et.FixedTime = time;
-                }
-                else
-                {
-                    et.BasedOn = (int?) basedOn;
-                    et.TimeDifference = timeDifference;
-                }
-                gr.AddEventType(et);
-            }
-            return Redirect("/");
-        }
 
-        //public ActionResult SubmitEvent(string eventName, DateTime date, bool isFixed, string time, BasedOn basedOn, int timeDifference, string identifier)
+
+        //public ActionResult SubmitEventEntry(bool recurring, string eventName, DateTime date, bool isFixed, string time, BasedOn basedOn, int timeDifference, string identifier, DateTime startDate, DateTime endDate)
         //{
         //    var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
-            
-        //        gr.AddEvent(new Event
-        //        {
-        //            Date = date,
-        //            EventName = eventName,
-        //            Time = time
-        //        });
-            
+        //    if (!recurring)
+        //    {
         //        var e = new Event
         //        {
-        //            EventName = eventName,
+        //            Date = date,
+        //            EventName = eventName
         //        };
-
         //        if (isFixed)
         //        {
         //            e.Time = time;
         //        }
         //        else
         //        {
-        //            e.Time = basedOn.ToString();
-                    
+        //            e.Time = gr.GetTimeBasedOnSomething(date, (int?)basedOn, timeDifference);
         //        }
         //        gr.AddEvent(e);
-            
-        //    return Redirect("/");
-        //}
-
-        //public ActionResult SubmitEventType(string eventName, bool isFixed, string time, BasedOn basedOn, int timeDifference, string identifier)
-        //{
-        //    var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
-            
+        //    }
+        //    else
+        //    {
         //        var et = new EventType
         //        {
         //            Name = eventName,
-        //            Identifier = identifier
+        //            Identifier = identifier,
+        //            StartDate = startDate,
+        //            EndDate = endDate
         //        };
         //        if (isFixed)
         //        {
@@ -142,9 +91,56 @@ namespace MyShulWorld.Controllers
         //            et.TimeDifference = timeDifference;
         //        }
         //        gr.AddEventType(et);
-            
+        //    }
         //    return Redirect("/");
         //}
+        [HttpPost]
+        public ActionResult SubmitEvent(string eventName, DateTime date, string time, BasedOn basedOn, int timeDifference)
+        {
+            var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
+
+            var e = new Event
+            {
+                EventName = eventName,
+                Date = date
+            };
+
+            if (time.Length > 0)
+            {
+                e.Time = time;
+            }
+            else
+            {
+                //e.Time = basedOn.ToString();
+                e.Time = gr.GetTimeBasedOnSomething(date, (int?)basedOn, timeDifference);
+
+            }
+            gr.AddEvent(e);
+
+            return Json(new { });
+        }
+
+        public ActionResult SubmitEventType(string eventName, string time, BasedOn basedOn, int timeDifference,IEnumerable<IEnumerable<string>>restrictions,IEnumerable<IEnumerable<string>>exclusions)
+        { 
+            var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
+
+            var et = new EventType
+            {
+                Name = eventName
+            };
+            if (time.Length > 0)
+            {
+                et.FixedTime = time;
+            }
+            else
+            {
+                et.BasedOn = (int?)basedOn;
+                et.TimeDifference = timeDifference;
+            }
+            gr.AddEventType(et);
+
+            return Redirect("/");
+        }
 
 
         //public ActionResult Calendar()
