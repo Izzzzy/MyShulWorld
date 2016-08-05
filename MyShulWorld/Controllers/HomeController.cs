@@ -9,8 +9,6 @@ namespace MyShulWorld.Controllers
 {
     public class HomeController : Controller
     {
-        //
-        // GET: /Home/
         public ActionResult EventEntry()
         {
             return View();
@@ -40,7 +38,7 @@ namespace MyShulWorld.Controllers
         {
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
             gr.PopulateEventsForAYear(year, gr.GetAllEventTypes());
-            return View();
+            return Redirect("/");
         }
 
         public ActionResult SubmitDeleteEvent(int eventId)
@@ -102,25 +100,19 @@ namespace MyShulWorld.Controllers
             var e = new Event
             {
                 EventName = eventName,
-                Date = date
+                Date = date,
+                Time =
+                    !String.IsNullOrEmpty(time)
+                        ? time
+                        : gr.GetTimeBasedOnSomething(date, (int?) basedOn, timeDifference)
             };
 
-            if (time.Length > 0)
-            {
-                e.Time = time;
-            }
-            else
-            {
-                //e.Time = basedOn.ToString();
-                e.Time = gr.GetTimeBasedOnSomething(date, (int?)basedOn, timeDifference);
-
-            }
             gr.AddEvent(e);
 
-            return Json(new { });
+            return Redirect("/");
         }
 
-        public ActionResult SubmitEventType(string eventName, string time, BasedOn basedOn, int timeDifference,IEnumerable<IEnumerable<string>>restrictions,IEnumerable<IEnumerable<string>>exclusions)
+        public ActionResult SubmitEventType(string eventName, string time, BasedOn basedOn, int timeDifference,IEnumerable<string>restrictions,IEnumerable<string>exclusions)
         { 
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
 
@@ -128,7 +120,7 @@ namespace MyShulWorld.Controllers
             {
                 Name = eventName
             };
-            if (time.Length > 0)
+            if (!String.IsNullOrEmpty(time))
             {
                 et.FixedTime = time;
             }
@@ -137,7 +129,7 @@ namespace MyShulWorld.Controllers
                 et.BasedOn = (int?)basedOn;
                 et.TimeDifference = timeDifference;
             }
-            gr.AddEventType(et);
+            gr.AddEventType(et,restrictions,exclusions);
 
             return Redirect("/");
         }

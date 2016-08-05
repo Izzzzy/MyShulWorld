@@ -33,15 +33,15 @@ namespace Zmanim.Data
     partial void InsertEvent(Event instance);
     partial void UpdateEvent(Event instance);
     partial void DeleteEvent(Event instance);
-    partial void InsertEventType(EventType instance);
-    partial void UpdateEventType(EventType instance);
-    partial void DeleteEventType(EventType instance);
     partial void InsertExclusion(Exclusion instance);
     partial void UpdateExclusion(Exclusion instance);
     partial void DeleteExclusion(Exclusion instance);
     partial void InsertRestriction(Restriction instance);
     partial void UpdateRestriction(Restriction instance);
     partial void DeleteRestriction(Restriction instance);
+    partial void InsertEventType(EventType instance);
+    partial void UpdateEventType(EventType instance);
+    partial void DeleteEventType(EventType instance);
     #endregion
 		
 		public MyShulWorldDBDataContext() : 
@@ -82,14 +82,6 @@ namespace Zmanim.Data
 			}
 		}
 		
-		public System.Data.Linq.Table<EventType> EventTypes
-		{
-			get
-			{
-				return this.GetTable<EventType>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Exclusion> Exclusions
 		{
 			get
@@ -103,6 +95,14 @@ namespace Zmanim.Data
 			get
 			{
 				return this.GetTable<Restriction>();
+			}
+		}
+		
+		public System.Data.Linq.Table<EventType> EventTypes
+		{
+			get
+			{
+				return this.GetTable<EventType>();
 			}
 		}
 	}
@@ -262,412 +262,6 @@ namespace Zmanim.Data
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EventTypes")]
-	public partial class EventType : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _Name;
-		
-		private System.Nullable<bool> _Fixed;
-		
-		private string _FixedTime;
-		
-		private System.Nullable<int> _BasedOn;
-		
-		private System.Nullable<int> _TimeDifference;
-		
-		private string _Identifier;
-		
-		private System.Nullable<System.DateTime> _StartDate;
-		
-		private System.Nullable<System.DateTime> _EndDate;
-		
-		private string _YearsPopulated;
-		
-		private string _TypesOfDaysApplicable;
-		
-		private string _DaysOfWeekApplicable;
-		
-		private string _TypesOfDaysExcluded;
-		
-		private EntitySet<Exclusion> _Exclusions;
-		
-		private EntitySet<Restriction> _Restrictions;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnFixedChanging(System.Nullable<bool> value);
-    partial void OnFixedChanged();
-    partial void OnFixedTimeChanging(string value);
-    partial void OnFixedTimeChanged();
-    partial void OnBasedOnChanging(System.Nullable<int> value);
-    partial void OnBasedOnChanged();
-    partial void OnTimeDifferenceChanging(System.Nullable<int> value);
-    partial void OnTimeDifferenceChanged();
-    partial void OnIdentifierChanging(string value);
-    partial void OnIdentifierChanged();
-    partial void OnStartDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnStartDateChanged();
-    partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnEndDateChanged();
-    partial void OnYearsPopulatedChanging(string value);
-    partial void OnYearsPopulatedChanged();
-    partial void OnTypesOfDaysApplicableChanging(string value);
-    partial void OnTypesOfDaysApplicableChanged();
-    partial void OnDaysOfWeekApplicableChanging(string value);
-    partial void OnDaysOfWeekApplicableChanged();
-    partial void OnTypesOfDaysExcludedChanging(string value);
-    partial void OnTypesOfDaysExcludedChanged();
-    #endregion
-		
-		public EventType()
-		{
-			this._Exclusions = new EntitySet<Exclusion>(new Action<Exclusion>(this.attach_Exclusions), new Action<Exclusion>(this.detach_Exclusions));
-			this._Restrictions = new EntitySet<Restriction>(new Action<Restriction>(this.attach_Restrictions), new Action<Restriction>(this.detach_Restrictions));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50)")]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Fixed", DbType="Bit")]
-		public System.Nullable<bool> Fixed
-		{
-			get
-			{
-				return this._Fixed;
-			}
-			set
-			{
-				if ((this._Fixed != value))
-				{
-					this.OnFixedChanging(value);
-					this.SendPropertyChanging();
-					this._Fixed = value;
-					this.SendPropertyChanged("Fixed");
-					this.OnFixedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FixedTime", DbType="VarChar(50)")]
-		public string FixedTime
-		{
-			get
-			{
-				return this._FixedTime;
-			}
-			set
-			{
-				if ((this._FixedTime != value))
-				{
-					this.OnFixedTimeChanging(value);
-					this.SendPropertyChanging();
-					this._FixedTime = value;
-					this.SendPropertyChanged("FixedTime");
-					this.OnFixedTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BasedOn", DbType="Int")]
-		public System.Nullable<int> BasedOn
-		{
-			get
-			{
-				return this._BasedOn;
-			}
-			set
-			{
-				if ((this._BasedOn != value))
-				{
-					this.OnBasedOnChanging(value);
-					this.SendPropertyChanging();
-					this._BasedOn = value;
-					this.SendPropertyChanged("BasedOn");
-					this.OnBasedOnChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeDifference", DbType="Int")]
-		public System.Nullable<int> TimeDifference
-		{
-			get
-			{
-				return this._TimeDifference;
-			}
-			set
-			{
-				if ((this._TimeDifference != value))
-				{
-					this.OnTimeDifferenceChanging(value);
-					this.SendPropertyChanging();
-					this._TimeDifference = value;
-					this.SendPropertyChanged("TimeDifference");
-					this.OnTimeDifferenceChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Identifier", DbType="VarChar(50)")]
-		public string Identifier
-		{
-			get
-			{
-				return this._Identifier;
-			}
-			set
-			{
-				if ((this._Identifier != value))
-				{
-					this.OnIdentifierChanging(value);
-					this.SendPropertyChanging();
-					this._Identifier = value;
-					this.SendPropertyChanged("Identifier");
-					this.OnIdentifierChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> StartDate
-		{
-			get
-			{
-				return this._StartDate;
-			}
-			set
-			{
-				if ((this._StartDate != value))
-				{
-					this.OnStartDateChanging(value);
-					this.SendPropertyChanging();
-					this._StartDate = value;
-					this.SendPropertyChanged("StartDate");
-					this.OnStartDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> EndDate
-		{
-			get
-			{
-				return this._EndDate;
-			}
-			set
-			{
-				if ((this._EndDate != value))
-				{
-					this.OnEndDateChanging(value);
-					this.SendPropertyChanging();
-					this._EndDate = value;
-					this.SendPropertyChanged("EndDate");
-					this.OnEndDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_YearsPopulated", DbType="VarChar(50)")]
-		public string YearsPopulated
-		{
-			get
-			{
-				return this._YearsPopulated;
-			}
-			set
-			{
-				if ((this._YearsPopulated != value))
-				{
-					this.OnYearsPopulatedChanging(value);
-					this.SendPropertyChanging();
-					this._YearsPopulated = value;
-					this.SendPropertyChanged("YearsPopulated");
-					this.OnYearsPopulatedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypesOfDaysApplicable", DbType="VarChar(50)")]
-		public string TypesOfDaysApplicable
-		{
-			get
-			{
-				return this._TypesOfDaysApplicable;
-			}
-			set
-			{
-				if ((this._TypesOfDaysApplicable != value))
-				{
-					this.OnTypesOfDaysApplicableChanging(value);
-					this.SendPropertyChanging();
-					this._TypesOfDaysApplicable = value;
-					this.SendPropertyChanged("TypesOfDaysApplicable");
-					this.OnTypesOfDaysApplicableChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DaysOfWeekApplicable", DbType="VarChar(50)")]
-		public string DaysOfWeekApplicable
-		{
-			get
-			{
-				return this._DaysOfWeekApplicable;
-			}
-			set
-			{
-				if ((this._DaysOfWeekApplicable != value))
-				{
-					this.OnDaysOfWeekApplicableChanging(value);
-					this.SendPropertyChanging();
-					this._DaysOfWeekApplicable = value;
-					this.SendPropertyChanged("DaysOfWeekApplicable");
-					this.OnDaysOfWeekApplicableChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypesOfDaysExcluded", DbType="VarChar(50)")]
-		public string TypesOfDaysExcluded
-		{
-			get
-			{
-				return this._TypesOfDaysExcluded;
-			}
-			set
-			{
-				if ((this._TypesOfDaysExcluded != value))
-				{
-					this.OnTypesOfDaysExcludedChanging(value);
-					this.SendPropertyChanging();
-					this._TypesOfDaysExcluded = value;
-					this.SendPropertyChanged("TypesOfDaysExcluded");
-					this.OnTypesOfDaysExcludedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EventType_Exclusion", Storage="_Exclusions", ThisKey="ID", OtherKey="EventTypeId")]
-		public EntitySet<Exclusion> Exclusions
-		{
-			get
-			{
-				return this._Exclusions;
-			}
-			set
-			{
-				this._Exclusions.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EventType_Restriction", Storage="_Restrictions", ThisKey="ID", OtherKey="EventTypeId")]
-		public EntitySet<Restriction> Restrictions
-		{
-			get
-			{
-				return this._Restrictions;
-			}
-			set
-			{
-				this._Restrictions.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Exclusions(Exclusion entity)
-		{
-			this.SendPropertyChanging();
-			entity.EventType = this;
-		}
-		
-		private void detach_Exclusions(Exclusion entity)
-		{
-			this.SendPropertyChanging();
-			entity.EventType = null;
-		}
-		
-		private void attach_Restrictions(Restriction entity)
-		{
-			this.SendPropertyChanging();
-			entity.EventType = this;
-		}
-		
-		private void detach_Restrictions(Restriction entity)
-		{
-			this.SendPropertyChanging();
-			entity.EventType = null;
 		}
 	}
 	
@@ -970,6 +564,340 @@ namespace Zmanim.Data
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EventTypes")]
+	public partial class EventType : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private System.Nullable<bool> _Fixed;
+		
+		private string _FixedTime;
+		
+		private System.Nullable<int> _BasedOn;
+		
+		private System.Nullable<int> _TimeDifference;
+		
+		private string _Identifier;
+		
+		private System.Nullable<System.DateTime> _StartDate;
+		
+		private System.Nullable<System.DateTime> _EndDate;
+		
+		private System.Nullable<System.DateTime> _LastDayPopulated;
+		
+		private EntitySet<Exclusion> _Exclusions;
+		
+		private EntitySet<Restriction> _Restrictions;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnFixedChanging(System.Nullable<bool> value);
+    partial void OnFixedChanged();
+    partial void OnFixedTimeChanging(string value);
+    partial void OnFixedTimeChanged();
+    partial void OnBasedOnChanging(System.Nullable<int> value);
+    partial void OnBasedOnChanged();
+    partial void OnTimeDifferenceChanging(System.Nullable<int> value);
+    partial void OnTimeDifferenceChanged();
+    partial void OnIdentifierChanging(string value);
+    partial void OnIdentifierChanged();
+    partial void OnStartDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnStartDateChanged();
+    partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnEndDateChanged();
+    partial void OnLastDayPopulatedChanging(System.Nullable<System.DateTime> value);
+    partial void OnLastDayPopulatedChanged();
+    #endregion
+		
+		public EventType()
+		{
+			this._Exclusions = new EntitySet<Exclusion>(new Action<Exclusion>(this.attach_Exclusions), new Action<Exclusion>(this.detach_Exclusions));
+			this._Restrictions = new EntitySet<Restriction>(new Action<Restriction>(this.attach_Restrictions), new Action<Restriction>(this.detach_Restrictions));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50)")]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Fixed", DbType="Bit")]
+		public System.Nullable<bool> Fixed
+		{
+			get
+			{
+				return this._Fixed;
+			}
+			set
+			{
+				if ((this._Fixed != value))
+				{
+					this.OnFixedChanging(value);
+					this.SendPropertyChanging();
+					this._Fixed = value;
+					this.SendPropertyChanged("Fixed");
+					this.OnFixedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FixedTime", DbType="VarChar(50)")]
+		public string FixedTime
+		{
+			get
+			{
+				return this._FixedTime;
+			}
+			set
+			{
+				if ((this._FixedTime != value))
+				{
+					this.OnFixedTimeChanging(value);
+					this.SendPropertyChanging();
+					this._FixedTime = value;
+					this.SendPropertyChanged("FixedTime");
+					this.OnFixedTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BasedOn", DbType="Int")]
+		public System.Nullable<int> BasedOn
+		{
+			get
+			{
+				return this._BasedOn;
+			}
+			set
+			{
+				if ((this._BasedOn != value))
+				{
+					this.OnBasedOnChanging(value);
+					this.SendPropertyChanging();
+					this._BasedOn = value;
+					this.SendPropertyChanged("BasedOn");
+					this.OnBasedOnChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeDifference", DbType="Int")]
+		public System.Nullable<int> TimeDifference
+		{
+			get
+			{
+				return this._TimeDifference;
+			}
+			set
+			{
+				if ((this._TimeDifference != value))
+				{
+					this.OnTimeDifferenceChanging(value);
+					this.SendPropertyChanging();
+					this._TimeDifference = value;
+					this.SendPropertyChanged("TimeDifference");
+					this.OnTimeDifferenceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Identifier", DbType="VarChar(50)")]
+		public string Identifier
+		{
+			get
+			{
+				return this._Identifier;
+			}
+			set
+			{
+				if ((this._Identifier != value))
+				{
+					this.OnIdentifierChanging(value);
+					this.SendPropertyChanging();
+					this._Identifier = value;
+					this.SendPropertyChanged("Identifier");
+					this.OnIdentifierChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> StartDate
+		{
+			get
+			{
+				return this._StartDate;
+			}
+			set
+			{
+				if ((this._StartDate != value))
+				{
+					this.OnStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._StartDate = value;
+					this.SendPropertyChanged("StartDate");
+					this.OnStartDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this.OnEndDateChanging(value);
+					this.SendPropertyChanging();
+					this._EndDate = value;
+					this.SendPropertyChanged("EndDate");
+					this.OnEndDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastDayPopulated", DbType="DateTime")]
+		public System.Nullable<System.DateTime> LastDayPopulated
+		{
+			get
+			{
+				return this._LastDayPopulated;
+			}
+			set
+			{
+				if ((this._LastDayPopulated != value))
+				{
+					this.OnLastDayPopulatedChanging(value);
+					this.SendPropertyChanging();
+					this._LastDayPopulated = value;
+					this.SendPropertyChanged("LastDayPopulated");
+					this.OnLastDayPopulatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EventType_Exclusion", Storage="_Exclusions", ThisKey="ID", OtherKey="EventTypeId")]
+		public EntitySet<Exclusion> Exclusions
+		{
+			get
+			{
+				return this._Exclusions;
+			}
+			set
+			{
+				this._Exclusions.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EventType_Restriction", Storage="_Restrictions", ThisKey="ID", OtherKey="EventTypeId")]
+		public EntitySet<Restriction> Restrictions
+		{
+			get
+			{
+				return this._Restrictions;
+			}
+			set
+			{
+				this._Restrictions.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Exclusions(Exclusion entity)
+		{
+			this.SendPropertyChanging();
+			entity.EventType = this;
+		}
+		
+		private void detach_Exclusions(Exclusion entity)
+		{
+			this.SendPropertyChanging();
+			entity.EventType = null;
+		}
+		
+		private void attach_Restrictions(Restriction entity)
+		{
+			this.SendPropertyChanging();
+			entity.EventType = this;
+		}
+		
+		private void detach_Restrictions(Restriction entity)
+		{
+			this.SendPropertyChanging();
+			entity.EventType = null;
 		}
 	}
 }
