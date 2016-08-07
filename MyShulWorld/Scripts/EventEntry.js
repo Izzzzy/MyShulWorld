@@ -297,7 +297,6 @@ $(function () {
     });
 
     $('#enter').click(function () {
-
         eventName = $('#event').val();
 
         if ($('input[name=isOneTime]:checked').val() === 'recurring') {
@@ -316,6 +315,8 @@ $(function () {
 
         if ($('input[name=ifFixed]:checked').val() === 'fixed') {
             pickedTime = $('#timepicker').val();
+            difference = 0;
+            basedOn = $('#based-on-select').val();
             $('.beforeAfterRdo').prop('checked', false);
         } else if ($('input[name=ifFixed]:checked').val() === "not-fixed") {
             basedOn = $('#based-on-select').val();
