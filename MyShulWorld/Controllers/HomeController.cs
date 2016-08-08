@@ -45,10 +45,14 @@ namespace MyShulWorld.Controllers
         {
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
             gr.DeleteEvent(eventId);
-            return View();
+            return Redirect("/");
         }
 
-
+        //public void test()//IEnumerable<string> restrictions)
+        //{
+        //    var x = 0;
+        //}
+    
 
         //public ActionResult SubmitEventEntry(bool recurring, string eventName, DateTime date, bool isFixed, string time, BasedOn basedOn, int timeDifference, string identifier, DateTime startDate, DateTime endDate)
         //{

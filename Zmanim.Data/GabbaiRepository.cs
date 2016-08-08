@@ -39,7 +39,7 @@ namespace Zmanim.Data
                     eventType.StartDate = et.StartDate < DateTime.Now ? DateTime.Now : et.StartDate;
                     eventType.EndDate = et.EndDate;
                     eventType.LastDayPopulated = et.LastDayPopulated;//maybe set LastDayPopulated to today and save previous
-                                                                     //LastDay in a variable to know where to populate til
+                    //LastDay in a variable to know where to populate til
 
                 }
                 context.SubmitChanges();
@@ -54,21 +54,51 @@ namespace Zmanim.Data
             {
                 eventType.StartDate = DateTime.Now;
             }
-            var res=new List<Restriction>();
-            var exc=new List<Exclusion>();
-            if (restrictions != null)
-            {
-                 res = (List<Restriction>) restrictions.Select(r => new Restriction { Restriction1 = r, EventTypeId = eventType.ID });
-           
-            }
-            if (exclusions != null)
-            {
-                 exc = (List<Exclusion>) exclusions.Select(e => new Exclusion { Exclusion1 = e, EventTypeId = eventType.ID });
-            }
-           
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
                 context.EventTypes.InsertOnSubmit(eventType);
+                context.SubmitChanges();
+            }
+            var res = new List<Restriction>();
+            var exc = new List<Exclusion>();
+            if (restrictions != null)
+            {
+                //res = (List<Restriction>) restrictions.Select(r => new Restriction { Restriction1 = r, EventTypeId = eventType.ID });
+                foreach (string s in restrictions)
+                {
+                    if (!String.IsNullOrEmpty(s))
+                    {
+                        res.Add(new Restriction
+                    {
+                        Restriction1 = s,
+                        EventTypeId = eventType.ID
+                    });
+                    }
+
+                }
+
+            }
+            if (exclusions != null)
+            {
+                //exc = (List<Exclusion>) exclusions.Select(e => new Exclusion { Exclusion1 = e, EventTypeId = eventType.ID });
+
+                foreach (string s in exclusions)
+                {
+                    if (!String.IsNullOrEmpty(s))
+                    {
+                        exc.Add(new Exclusion
+                    {
+                        Exclusion1 = s,
+                        EventTypeId = eventType.ID
+                    });
+                    }
+
+                }
+            }
+
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+
                 context.Restrictions.InsertAllOnSubmit(res);
                 context.Exclusions.InsertAllOnSubmit(exc);
                 context.SubmitChanges();
@@ -153,17 +183,29 @@ namespace Zmanim.Data
         {
             foreach (EventType et in eventTypes)
             {
-                if (et.LastDayPopulated>=DateTime.Parse(year+"-12-31"))
+                if (et.LastDayPopulated >= DateTime.Parse(year + "-12-31"))
                 {
                     continue;
                 }
                 DateTime d = DateTime.Parse(year + "-01-01");
                 if (et.LastDayPopulated > DateTime.Parse(year + "-01-01"))
                 {
-                    d = (DateTime) et.LastDayPopulated;
+                    d = (DateTime)et.LastDayPopulated;
+                }
+                if (d < DateTime.Now)
+                {
+                    d = DateTime.Now;
                 }
                 //GenerateInsertionOfEventsForYear(year, et);
                 GenerateInsertionOfEvents(d, DateTime.Parse(year + "-12/31"), et);
+                using (var context = new MyShulWorldDBDataContext(_connectionString))
+                {
+                    var firstOrDefault = context.EventTypes.FirstOrDefault(e => e.ID == et.ID);
+                    if (firstOrDefault != null)
+                        firstOrDefault.LastDayPopulated = DateTime.Parse(year + "-12/31");
+
+                    context.SubmitChanges();
+                }
             }
         }
 
@@ -175,7 +217,7 @@ namespace Zmanim.Data
             //    Items = (Item[])GetItemsBetweenDates(start, end)
             //};
 
-            for (DateTime x = start; x <= end; x.AddDays(1))
+            for (DateTime x = start; x <= end.AddDays(1); x = x.AddDays(1))
             {
                 if (IsApplicable(x, GetTypesOfDay(x, items.Items.Where(i => DateTime.Parse(i.Date) == x)), eventType))
                 {
@@ -362,7 +404,7 @@ namespace Zmanim.Data
 
 
         //private IEnumerable<Item> GetItemsBetweenDates(DateTime start, DateTime end)
-            private HebcalItems GetItemsBetweenDates(DateTime start, DateTime end)
+        private HebcalItems GetItemsBetweenDates(DateTime start, DateTime end)
         {
             List<Item> items = new List<Item>();
             for (int x = start.Year; x <= end.Year; x++)
@@ -384,10 +426,10 @@ namespace Zmanim.Data
                     }
                 }
             }
-            HebcalItems it=new HebcalItems();
+            HebcalItems it = new HebcalItems();
             it.Items = items.ToArray();
             //return items;
-                return it;
+            return it;
         }
 
         private IEnumerable<Item> GetItemsForYear(string year)
