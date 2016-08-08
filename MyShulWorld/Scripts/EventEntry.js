@@ -151,7 +151,7 @@
         }
         if ($('input[name=isOneTime]:checked').val() === 'recurring') {
             console.log(restrictArray);
-            $.post('/home/SubmitEventType', { eventName: eventName, time: pickedTime, BasedOn: basedOn, timeDifference: difference, restrictions: restrictArray, exclusions: excludeArray }, function () {
+            $.post('/home/SubmitEventType', { eventName: eventName, startDate: fromDate, endDate: toDate, time: pickedTime, BasedOn: basedOn, timeDifference: difference, restrictions: restrictArray, exclusions: excludeArray }, function () {
             
                 window.location = "/home/index/";
             });

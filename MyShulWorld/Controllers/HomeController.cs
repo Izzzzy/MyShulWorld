@@ -116,7 +116,7 @@ namespace MyShulWorld.Controllers
             return Redirect("/");
         }
 
-        public ActionResult SubmitEventType(string eventName, string time, BasedOn basedOn, int timeDifference,IEnumerable<string>restrictions,IEnumerable<string>exclusions)
+        public ActionResult SubmitEventType(string eventName, string time, DateTime startDate, DateTime endDate, BasedOn basedOn, int timeDifference,IEnumerable<string>restrictions,IEnumerable<string>exclusions)
         { 
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
 
@@ -124,6 +124,8 @@ namespace MyShulWorld.Controllers
             {
                 Name = eventName
             };
+            et.StartDate = startDate;
+            et.EndDate = endDate;
             if (!String.IsNullOrEmpty(time))
             {
                 et.FixedTime = time;

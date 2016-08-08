@@ -219,7 +219,8 @@ namespace Zmanim.Data
 
             for (DateTime x = start; x <= end.AddDays(1); x = x.AddDays(1))
             {
-                if (IsApplicable(x, GetTypesOfDay(x, items.Items.Where(i => DateTime.Parse(i.Date) == x)), eventType))
+                //var x1 = x;
+                if (IsApplicable(x, GetTypesOfDay(x, items.Items.Where(i => (DateTime.Parse(i.Date)).Date == x.Date)), eventType))
                 {
                     Event e = new Event
                     {
@@ -360,7 +361,7 @@ namespace Zmanim.Data
 
         private bool IsApplicable(DateTime date, IEnumerable<string> typesOfDay, EventType et)
         {
-            if ((et.StartDate != null && date < et.StartDate) || (et.EndDate != null && date > et.EndDate))
+            if ((date < et.StartDate) || (date > et.EndDate))
             {
                 return false;
             }

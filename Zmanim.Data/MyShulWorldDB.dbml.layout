@@ -8,36 +8,36 @@
         <elementListCompartment Id="ae4f35d7-98a4-4d4c-9426-118ae7ab497d" absoluteBounds="0.64000000000000012, 1.71, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="d60a3578-af2a-4278-a79f-961baa61fe63" absoluteBounds="6.625, 1.125, 2, 1.3862939453125">
+    <classShape Id="90865c64-f5f1-4e81-a850-abf53c46e5d5" absoluteBounds="6.5, 1.125, 2, 1.3862939453125">
       <DataClassMoniker Name="/MyShulWorldDBDataContext/Exclusion" />
       <nestedChildShapes>
-        <elementListCompartment Id="249bb50c-fd8b-4aee-ba4c-8b0354015c29" absoluteBounds="6.6400000000000006, 1.585, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="6cfc3914-4ac6-4327-9db2-fe121fb1040a" absoluteBounds="6.515, 1.585, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="750c901a-553e-4941-89cb-82b08c4fb696" absoluteBounds="6.625, 2.875, 2, 1.3862939453125005">
+    <classShape Id="d70b8af2-4ff4-4047-9535-b00fc5cd31db" absoluteBounds="6.5, 3.25, 2, 1.3862939453125005">
       <DataClassMoniker Name="/MyShulWorldDBDataContext/Restriction" />
       <nestedChildShapes>
-        <elementListCompartment Id="b0d81bb4-92cf-4804-8831-8d1a226305d0" absoluteBounds="6.6400000000000006, 3.335, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="3f59a03d-d853-4d8d-81d5-88a27e3bc4d6" absoluteBounds="6.515, 3.71, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="ea1c8c06-a5d5-44ef-80ea-89d3a286f00d" absoluteBounds="3.75, 1.5, 2, 2.7324039713541666">
+    <classShape Id="b3717f92-2700-4d24-9df0-4c7b05233d20" absoluteBounds="3.5, 1.5, 2, 2.5401025390625">
       <DataClassMoniker Name="/MyShulWorldDBDataContext/EventType" />
       <nestedChildShapes>
-        <elementListCompartment Id="32a82b36-2b0e-4d8e-8fbc-61fa8cd7d588" absoluteBounds="3.7649999999999997, 1.96, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="3630d154-1661-44f6-ac0b-41961fafb2b4" absoluteBounds="3.5149999999999997, 1.96, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(5.75 : 2.00564697265625); (6.625 : 2.00564697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.5 : 2.00564697265625); (6.5 : 2.00564697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/MyShulWorldDBDataContext/EventType/EventType_Exclusion" />
       <nodes>
-        <classShapeMoniker Id="ea1c8c06-a5d5-44ef-80ea-89d3a286f00d" />
-        <classShapeMoniker Id="d60a3578-af2a-4278-a79f-961baa61fe63" />
+        <classShapeMoniker Id="b3717f92-2700-4d24-9df0-4c7b05233d20" />
+        <classShapeMoniker Id="90865c64-f5f1-4e81-a850-abf53c46e5d5" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.75 : 3.55370198567708); (6.625 : 3.55370198567708)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.5 : 3.64505126953125); (6.5 : 3.64505126953125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/MyShulWorldDBDataContext/EventType/EventType_Restriction" />
       <nodes>
-        <classShapeMoniker Id="ea1c8c06-a5d5-44ef-80ea-89d3a286f00d" />
-        <classShapeMoniker Id="750c901a-553e-4941-89cb-82b08c4fb696" />
+        <classShapeMoniker Id="b3717f92-2700-4d24-9df0-4c7b05233d20" />
+        <classShapeMoniker Id="d70b8af2-4ff4-4047-9535-b00fc5cd31db" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

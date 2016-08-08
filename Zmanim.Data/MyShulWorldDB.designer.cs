@@ -317,7 +317,7 @@ namespace Zmanim.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="Exclusion", Storage="_Exclusion1", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="Exclusion", Storage="_Exclusion1", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
 		public string Exclusion1
 		{
 			get
@@ -468,7 +468,7 @@ namespace Zmanim.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="Restriction", Storage="_Restriction1", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="Restriction", Storage="_Restriction1", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
 		public string Restriction1
 		{
 			get
@@ -585,8 +585,6 @@ namespace Zmanim.Data
 		
 		private System.Nullable<int> _TimeDifference;
 		
-		private string _Identifier;
-		
 		private System.Nullable<System.DateTime> _StartDate;
 		
 		private System.Nullable<System.DateTime> _EndDate;
@@ -613,8 +611,6 @@ namespace Zmanim.Data
     partial void OnBasedOnChanged();
     partial void OnTimeDifferenceChanging(System.Nullable<int> value);
     partial void OnTimeDifferenceChanged();
-    partial void OnIdentifierChanging(string value);
-    partial void OnIdentifierChanged();
     partial void OnStartDateChanging(System.Nullable<System.DateTime> value);
     partial void OnStartDateChanged();
     partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
@@ -750,27 +746,7 @@ namespace Zmanim.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Identifier", DbType="VarChar(50)")]
-		public string Identifier
-		{
-			get
-			{
-				return this._Identifier;
-			}
-			set
-			{
-				if ((this._Identifier != value))
-				{
-					this.OnIdentifierChanging(value);
-					this.SendPropertyChanging();
-					this._Identifier = value;
-					this.SendPropertyChanged("Identifier");
-					this.OnIdentifierChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="Date")]
 		public System.Nullable<System.DateTime> StartDate
 		{
 			get
@@ -790,7 +766,7 @@ namespace Zmanim.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="Date")]
 		public System.Nullable<System.DateTime> EndDate
 		{
 			get
