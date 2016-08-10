@@ -1,14 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="MyShulWorld" Class="MyShulWorldDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=MyShulWorld;Integrated Security=True" SettingsObjectName="Zmanim.Data.Properties.Settings" SettingsPropertyName="MyShulWorldConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.Events" Member="Events">
-    <Type Name="Event">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="EventName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="Time" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="Date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
-      <Column Name="EventTypeId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Exclusions" Member="Exclusions">
     <Type Name="Exclusion">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -38,6 +29,19 @@
       <Column Name="LastDayPopulated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="EventType_Exclusion" Member="Exclusions" ThisKey="ID" OtherKey="EventTypeId" Type="Exclusion" />
       <Association Name="EventType_Restriction" Member="Restrictions" ThisKey="ID" OtherKey="EventTypeId" Type="Restriction" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Events" Member="Events">
+    <Type Name="Event">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="EventName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Time" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="EventTypeId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BasedOn" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TimeDifference" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Event_Event" Member="Event2" ThisKey="Id" OtherKey="Id" Type="Event" Cardinality="One" />
+      <Association Name="Event_Event" Member="Event1" ThisKey="Id" OtherKey="Id" Type="Event" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

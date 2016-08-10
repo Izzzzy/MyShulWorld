@@ -9,6 +9,13 @@ namespace MyShulWorld.Controllers
 {
     public class HomeController : Controller
     {
+        public ActionResult DeleteAllEventTypesAndEvents()
+        {
+            var gr=new GabbaiRepository(Properties.Settings.Default.ConStr);
+            gr.DeleteAllEventsAndEventTypes();
+            return Redirect("/");
+        }
+    
         public ActionResult EventEntry()
         {
             return View();
@@ -116,7 +123,12 @@ namespace MyShulWorld.Controllers
             return Redirect("/");
         }
 
-        public ActionResult SubmitEventType(string eventName, string time, DateTime startDate, DateTime endDate, BasedOn basedOn, int timeDifference,IEnumerable<string>restrictions,IEnumerable<string>exclusions)
+        public ActionResult YearView()
+        {
+            return View();
+        }
+    
+        public ActionResult SubmitEventType(string eventName, string time, DateTime? startDate, DateTime? endDate, BasedOn basedOn, int timeDifference,IEnumerable<string>restrictions,IEnumerable<string>exclusions)
         { 
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
 

@@ -30,9 +30,6 @@ namespace Zmanim.Data
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertEvent(Event instance);
-    partial void UpdateEvent(Event instance);
-    partial void DeleteEvent(Event instance);
     partial void InsertExclusion(Exclusion instance);
     partial void UpdateExclusion(Exclusion instance);
     partial void DeleteExclusion(Exclusion instance);
@@ -42,6 +39,9 @@ namespace Zmanim.Data
     partial void InsertEventType(EventType instance);
     partial void UpdateEventType(EventType instance);
     partial void DeleteEventType(EventType instance);
+    partial void InsertEvent(Event instance);
+    partial void UpdateEvent(Event instance);
+    partial void DeleteEvent(Event instance);
     #endregion
 		
 		public MyShulWorldDBDataContext() : 
@@ -74,14 +74,6 @@ namespace Zmanim.Data
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<Event> Events
-		{
-			get
-			{
-				return this.GetTable<Event>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Exclusion> Exclusions
 		{
 			get
@@ -105,162 +97,12 @@ namespace Zmanim.Data
 				return this.GetTable<EventType>();
 			}
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Events")]
-	public partial class Event : INotifyPropertyChanging, INotifyPropertyChanged
-	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _EventName;
-		
-		private string _Time;
-		
-		private System.Nullable<System.DateTime> _Date;
-		
-		private System.Nullable<int> _EventTypeId;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnEventNameChanging(string value);
-    partial void OnEventNameChanged();
-    partial void OnTimeChanging(string value);
-    partial void OnTimeChanged();
-    partial void OnDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateChanged();
-    partial void OnEventTypeIdChanging(System.Nullable<int> value);
-    partial void OnEventTypeIdChanged();
-    #endregion
-		
-		public Event()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
+		public System.Data.Linq.Table<Event> Events
 		{
 			get
 			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventName", DbType="VarChar(50)")]
-		public string EventName
-		{
-			get
-			{
-				return this._EventName;
-			}
-			set
-			{
-				if ((this._EventName != value))
-				{
-					this.OnEventNameChanging(value);
-					this.SendPropertyChanging();
-					this._EventName = value;
-					this.SendPropertyChanged("EventName");
-					this.OnEventNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Time", DbType="VarChar(50)")]
-		public string Time
-		{
-			get
-			{
-				return this._Time;
-			}
-			set
-			{
-				if ((this._Time != value))
-				{
-					this.OnTimeChanging(value);
-					this.SendPropertyChanging();
-					this._Time = value;
-					this.SendPropertyChanged("Time");
-					this.OnTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Date", DbType="Date")]
-		public System.Nullable<System.DateTime> Date
-		{
-			get
-			{
-				return this._Date;
-			}
-			set
-			{
-				if ((this._Date != value))
-				{
-					this.OnDateChanging(value);
-					this.SendPropertyChanging();
-					this._Date = value;
-					this.SendPropertyChanged("Date");
-					this.OnDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventTypeId", DbType="Int")]
-		public System.Nullable<int> EventTypeId
-		{
-			get
-			{
-				return this._EventTypeId;
-			}
-			set
-			{
-				if ((this._EventTypeId != value))
-				{
-					this.OnEventTypeIdChanging(value);
-					this.SendPropertyChanging();
-					this._EventTypeId = value;
-					this.SendPropertyChanged("EventTypeId");
-					this.OnEventTypeIdChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+				return this.GetTable<Event>();
 			}
 		}
 	}
@@ -874,6 +716,285 @@ namespace Zmanim.Data
 		{
 			this.SendPropertyChanging();
 			entity.EventType = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Events")]
+	public partial class Event : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _EventName;
+		
+		private string _Time;
+		
+		private System.Nullable<System.DateTime> _Date;
+		
+		private System.Nullable<int> _EventTypeId;
+		
+		private System.Nullable<int> _BasedOn;
+		
+		private System.Nullable<int> _TimeDifference;
+		
+		private EntityRef<Event> _Event2;
+		
+		private EntityRef<Event> _Event1;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnEventNameChanging(string value);
+    partial void OnEventNameChanged();
+    partial void OnTimeChanging(string value);
+    partial void OnTimeChanged();
+    partial void OnDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateChanged();
+    partial void OnEventTypeIdChanging(System.Nullable<int> value);
+    partial void OnEventTypeIdChanged();
+    partial void OnBasedOnChanging(System.Nullable<int> value);
+    partial void OnBasedOnChanged();
+    partial void OnTimeDifferenceChanging(System.Nullable<int> value);
+    partial void OnTimeDifferenceChanged();
+    #endregion
+		
+		public Event()
+		{
+			this._Event2 = default(EntityRef<Event>);
+			this._Event1 = default(EntityRef<Event>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					if (this._Event1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventName", DbType="VarChar(50)")]
+		public string EventName
+		{
+			get
+			{
+				return this._EventName;
+			}
+			set
+			{
+				if ((this._EventName != value))
+				{
+					this.OnEventNameChanging(value);
+					this.SendPropertyChanging();
+					this._EventName = value;
+					this.SendPropertyChanged("EventName");
+					this.OnEventNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Time", DbType="VarChar(50)")]
+		public string Time
+		{
+			get
+			{
+				return this._Time;
+			}
+			set
+			{
+				if ((this._Time != value))
+				{
+					this.OnTimeChanging(value);
+					this.SendPropertyChanging();
+					this._Time = value;
+					this.SendPropertyChanged("Time");
+					this.OnTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Date", DbType="Date")]
+		public System.Nullable<System.DateTime> Date
+		{
+			get
+			{
+				return this._Date;
+			}
+			set
+			{
+				if ((this._Date != value))
+				{
+					this.OnDateChanging(value);
+					this.SendPropertyChanging();
+					this._Date = value;
+					this.SendPropertyChanged("Date");
+					this.OnDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventTypeId", DbType="Int")]
+		public System.Nullable<int> EventTypeId
+		{
+			get
+			{
+				return this._EventTypeId;
+			}
+			set
+			{
+				if ((this._EventTypeId != value))
+				{
+					this.OnEventTypeIdChanging(value);
+					this.SendPropertyChanging();
+					this._EventTypeId = value;
+					this.SendPropertyChanged("EventTypeId");
+					this.OnEventTypeIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BasedOn", DbType="Int")]
+		public System.Nullable<int> BasedOn
+		{
+			get
+			{
+				return this._BasedOn;
+			}
+			set
+			{
+				if ((this._BasedOn != value))
+				{
+					this.OnBasedOnChanging(value);
+					this.SendPropertyChanging();
+					this._BasedOn = value;
+					this.SendPropertyChanged("BasedOn");
+					this.OnBasedOnChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeDifference", DbType="Int")]
+		public System.Nullable<int> TimeDifference
+		{
+			get
+			{
+				return this._TimeDifference;
+			}
+			set
+			{
+				if ((this._TimeDifference != value))
+				{
+					this.OnTimeDifferenceChanging(value);
+					this.SendPropertyChanging();
+					this._TimeDifference = value;
+					this.SendPropertyChanged("TimeDifference");
+					this.OnTimeDifferenceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Event_Event", Storage="_Event2", ThisKey="Id", OtherKey="Id", IsUnique=true, IsForeignKey=false)]
+		public Event Event2
+		{
+			get
+			{
+				return this._Event2.Entity;
+			}
+			set
+			{
+				Event previousValue = this._Event2.Entity;
+				if (((previousValue != value) 
+							|| (this._Event2.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Event2.Entity = null;
+						previousValue.Event1 = null;
+					}
+					this._Event2.Entity = value;
+					if ((value != null))
+					{
+						value.Event1 = this;
+					}
+					this.SendPropertyChanged("Event2");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Event_Event", Storage="_Event1", ThisKey="Id", OtherKey="Id", IsForeignKey=true)]
+		public Event Event1
+		{
+			get
+			{
+				return this._Event1.Entity;
+			}
+			set
+			{
+				Event previousValue = this._Event1.Entity;
+				if (((previousValue != value) 
+							|| (this._Event1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Event1.Entity = null;
+						previousValue.Event2 = null;
+					}
+					this._Event1.Entity = value;
+					if ((value != null))
+					{
+						value.Event2 = this;
+						this._Id = value.Id;
+					}
+					else
+					{
+						this._Id = default(int);
+					}
+					this.SendPropertyChanged("Event1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

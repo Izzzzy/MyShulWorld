@@ -2,12 +2,6 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="MyShulWorldDB">
   <DataContextMoniker Name="/MyShulWorldDBDataContext" />
   <nestedChildShapes>
-    <classShape Id="0ce532f6-31bf-4b46-b7aa-cf9036965450" absoluteBounds="0.625, 1.25, 2, 1.7708968098958331">
-      <DataClassMoniker Name="/MyShulWorldDBDataContext/Event" />
-      <nestedChildShapes>
-        <elementListCompartment Id="ae4f35d7-98a4-4d4c-9426-118ae7ab497d" absoluteBounds="0.64000000000000012, 1.71, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
     <classShape Id="90865c64-f5f1-4e81-a850-abf53c46e5d5" absoluteBounds="6.5, 1.125, 2, 1.3862939453125">
       <DataClassMoniker Name="/MyShulWorldDBDataContext/Exclusion" />
       <nestedChildShapes>
@@ -20,24 +14,37 @@
         <elementListCompartment Id="3f59a03d-d853-4d8d-81d5-88a27e3bc4d6" absoluteBounds="6.515, 3.71, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="b3717f92-2700-4d24-9df0-4c7b05233d20" absoluteBounds="3.5, 1.5, 2, 2.5401025390625">
+    <classShape Id="7963dc4f-2aeb-435e-94b0-331ad6208d9a" absoluteBounds="3.875, 1.875, 2, 2.5401025390625">
       <DataClassMoniker Name="/MyShulWorldDBDataContext/EventType" />
       <nestedChildShapes>
-        <elementListCompartment Id="3630d154-1661-44f6-ac0b-41961fafb2b4" absoluteBounds="3.5149999999999997, 1.96, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="54a83e50-7181-4565-8985-9a2e4ad0891d" absoluteBounds="3.8899999999999997, 2.335, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(5.5 : 2.00564697265625); (6.5 : 2.00564697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.875 : 2.19314697265625); (6.5 : 2.19314697265625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/MyShulWorldDBDataContext/EventType/EventType_Exclusion" />
       <nodes>
-        <classShapeMoniker Id="b3717f92-2700-4d24-9df0-4c7b05233d20" />
+        <classShapeMoniker Id="7963dc4f-2aeb-435e-94b0-331ad6208d9a" />
         <classShapeMoniker Id="90865c64-f5f1-4e81-a850-abf53c46e5d5" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 3.64505126953125); (6.5 : 3.64505126953125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.875 : 3.83255126953125); (6.5 : 3.83255126953125)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/MyShulWorldDBDataContext/EventType/EventType_Restriction" />
       <nodes>
-        <classShapeMoniker Id="b3717f92-2700-4d24-9df0-4c7b05233d20" />
+        <classShapeMoniker Id="7963dc4f-2aeb-435e-94b0-331ad6208d9a" />
         <classShapeMoniker Id="d70b8af2-4ff4-4047-9535-b00fc5cd31db" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="597ad683-d0c3-45d7-8742-a15b9d519199" absoluteBounds="1.125, 1, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/MyShulWorldDBDataContext/Event" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8f4cb875-a6b2-4490-9756-a2ef5132e95b" absoluteBounds="1.1400000000000001, 1.46, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(1.83423076923077 : 3.15549967447917); (1.83423076923077 : 3.40549967447917); (2.42961538461538 : 3.40549967447917); (2.42961538461538 : 3.15549967447917)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/MyShulWorldDBDataContext/Event/Event_Event" />
+      <nodes>
+        <classShapeMoniker Id="597ad683-d0c3-45d7-8742-a15b9d519199" />
+        <classShapeMoniker Id="597ad683-d0c3-45d7-8742-a15b9d519199" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

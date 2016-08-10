@@ -320,6 +320,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <None Include="Views\Home\Calendar.cshtml" />
     <Content Include="Views\Home\EventEntry.cshtml" />
+    <Content Include="Views\Home\YearView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

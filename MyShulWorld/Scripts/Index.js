@@ -23,7 +23,8 @@
         eventSources: [
 
             {
-                url: "https://www.hebcal.com/hebcal/?cfg=fc&v=1&i=off&maj=on&min=on&nx=on&mf=on&ss=on&mod=on&lg=s&s=on",
+                //url: "https://www.hebcal.com/hebcal/?cfg=fc&v=1&i=off&maj=on&min=on&nx=on&mf=on&ss=on&mod=on&lg=s&s=on",
+                url: "https://www.hebcal.com/hebcal/?cfg=fc&v=1&i=off&maj=on&min=on&nx=on&mf=on&ss=on&mod=on&lg=a&s=on",//&d=on for hebrew date
                 cache: true
             },
 
@@ -33,7 +34,8 @@
                 //textColor: 'black'
             }
 
-        ]
+        ],
+        timeFormat: 'h:mm'
     });
     //$("#calendar").fullCalendar({
     //    events: eventsAjax
