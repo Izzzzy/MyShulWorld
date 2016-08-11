@@ -34,19 +34,12 @@ namespace Zmanim.Data
             }
         }
 
-        private void DeleteRestrictonsForEventType(int eventTypeId)
+        
+        private void DeleteRestrictionsAndExclusionsForEventType(int eventTypeId)
         {
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
                 context.Restrictions.DeleteAllOnSubmit(context.Restrictions.Where(r => r.EventTypeId == eventTypeId));
-                context.SubmitChanges();
-            }
-        }
-
-        private void DeleteExclusionsForEventType(int eventTypeId)
-        {
-            using (var context = new MyShulWorldDBDataContext(_connectionString))
-            {
                 context.Exclusions.DeleteAllOnSubmit(context.Exclusions.Where(e => e.EventTypeId == eventTypeId));
                 context.SubmitChanges();
             }
@@ -107,8 +100,7 @@ namespace Zmanim.Data
                 //context.Events.DeleteAllOnSubmit(events);
                 DateTime dt = et.LastDayPopulated.Value;
                 DeleteEvents(DateTime.Now, et.LastDayPopulated.Value, et.ID);
-                DeleteRestrictonsForEventType(et.ID);
-                DeleteExclusionsForEventType(et.ID);
+                DeleteRestrictionsAndExclusionsForEventType(et.ID);
                 EventType eventType = context.EventTypes.FirstOrDefault(e => e.ID == eventTypeId);
                 if (eventType != null)
                 {
@@ -125,12 +117,12 @@ namespace Zmanim.Data
                 context.SubmitChanges();
 
                 AddRestrictionsAndExclusions(et.ID,restrictions,exclusions);
-                MakeSureEventsAreUpToDate(dt, et);
+                MakeSureEventsAreUpToDateForEventType(dt, et);
                 
             }
         }
 
-        private void MakeSureEventsAreUpToDate(DateTime date, EventType et)
+        private void MakeSureEventsAreUpToDateForEventType(DateTime date, EventType et)
         {
             if (et.LastDayPopulated > date)
             {
@@ -202,16 +194,14 @@ namespace Zmanim.Data
             //    context.Exclusions.InsertAllOnSubmit(exc);
             //    context.SubmitChanges();
             //}
-            MakeSureEventsAreUpToDate(DateTime.Now, eventType);
+            MakeSureEventsAreUpToDateForEventType(DateTime.Now, eventType);
         }
 
         public void DeleteEventType(int eventTypeId)
         {
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
-                context.Restrictions.DeleteAllOnSubmit(context.Restrictions.Where(r => r.EventTypeId == eventTypeId));
-                context.Exclusions.DeleteAllOnSubmit(context.Exclusions.Where(e => e.EventTypeId == eventTypeId));
-                context.SubmitChanges();
+                DeleteRestrictionsAndExclusionsForEventType(eventTypeId);
 
                 context.EventTypes.DeleteOnSubmit(GetEventTypeById(eventTypeId));
                 var events = context.Events.Where(e => e.EventTypeId == eventTypeId && e.Date > DateTime.Now);
@@ -375,7 +365,7 @@ namespace Zmanim.Data
         {
             foreach (EventType et in GetAllEventTypes())
             {
-                MakeSureEventsAreUpToDate(date, et);
+                MakeSureEventsAreUpToDateForEventType(date, et);
             }
         }
 
@@ -601,7 +591,9 @@ namespace Zmanim.Data
                     cEvents.Add(new CalendarEvent
                     {
                         Title = e.EventName + " " + e.Time,
-                        Start = d.ToString("yyyy-MM-dd")// + "T" + time//"14:30:00" //e.Time.Replace(" AM",":00")
+                        Start = d.ToString("yyyy-MM-dd"),// + "T" + time//"14:30:00" //e.Time.Replace(" AM",":00")
+                        Id=e.Id,
+                        Url="/home/eventEntry?eventId="+e.Id
 
                     });
                 }
@@ -609,11 +601,19 @@ namespace Zmanim.Data
             }
         }
 
-        public Event GetEventById(int eventId)
+        public Event GetEventById(int? eventId)
         {
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
                 return context.Events.FirstOrDefault(e => e.Id == eventId);
+            }
+        }
+
+        public EventType GetEventTypeById(int? eventTypeId)
+        {
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                return context.EventTypes.FirstOrDefault(et => et.ID == eventTypeId);
             }
         }
 
@@ -639,6 +639,25 @@ namespace Zmanim.Data
 
 
 
+
+
+        //private void DeleteRestrictonsForEventType(int eventTypeId)
+        //{
+        //    using (var context = new MyShulWorldDBDataContext(_connectionString))
+        //    {
+        //        context.Restrictions.DeleteAllOnSubmit(context.Restrictions.Where(r => r.EventTypeId == eventTypeId));
+        //        context.SubmitChanges();
+        //    }
+        //}
+
+        //private void DeleteExclusionsForEventType(int eventTypeId)
+        //{
+        //    using (var context = new MyShulWorldDBDataContext(_connectionString))
+        //    {
+        //        context.Exclusions.DeleteAllOnSubmit(context.Exclusions.Where(e => e.EventTypeId == eventTypeId));
+        //        context.SubmitChanges();
+        //    }
+        //}
 
 
         //private bool IsApplicable(DateTime date, Item itemForDate, EventType et)
@@ -873,45 +892,45 @@ namespace Zmanim.Data
             return "RegularDay";
         }
 
-        public void PopulateShkiaFor30Days()
-        {
-            var date = DateTime.Now;
+        //public void PopulateShkiaFor30Days()
+        //{
+        //    var date = DateTime.Now;
 
-            string locationName = "Lakewood, NJ";
-            double latitude = 40.09596; //Lakewood, NJ
-            double longitude = -74.22213; //Lakewood, NJ
-            double elevation = 0; //optional elevation
-            ITimeZone timeZone = new OlsonTimeZone("America/New_York");
-            GeoLocation location = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
-            //ComplexZmanimCalendar zc = new ComplexZmanimCalendar(location);
-            //optionally set it to a specific date with a year, month and day
-            //ComplexZmanimCalendar zc = new ComplexZmanimCalendar(new DateTime(1969, 2, 8), location);
-            using (var context = new MyShulWorldDBDataContext(_connectionString))
-            {
-                for (int x = 0; x < 30; x++)
-                {
-                    ComplexZmanimCalendar zc = new ComplexZmanimCalendar(date, location);
-                    DateTime dateTime = (DateTime)zc.GetSunset();
-                    //TimeSpan time = (TimeSpan)dateTime.ToString("h:mm tt");
-                    string time = dateTime.ToShortTimeString();
-                    //context.Events.InsertOnSubmit(new Event
-                    //{
-                    //    EventName="Shkia",
-                    //    Time = time,
-                    //    Date=date
-                    //});
-                    AddEvent(new Event
-                    {
-                        EventName = "Shkia",
-                        Time = time,
-                        Date = date
-                    });
-                    date = date.AddDays(1);
-                    //context.SubmitChanges();
-                }
+        //    string locationName = "Lakewood, NJ";
+        //    double latitude = 40.09596; //Lakewood, NJ
+        //    double longitude = -74.22213; //Lakewood, NJ
+        //    double elevation = 0; //optional elevation
+        //    ITimeZone timeZone = new OlsonTimeZone("America/New_York");
+        //    GeoLocation location = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
+        //    //ComplexZmanimCalendar zc = new ComplexZmanimCalendar(location);
+        //    //optionally set it to a specific date with a year, month and day
+        //    //ComplexZmanimCalendar zc = new ComplexZmanimCalendar(new DateTime(1969, 2, 8), location);
+        //    using (var context = new MyShulWorldDBDataContext(_connectionString))
+        //    {
+        //        for (int x = 0; x < 30; x++)
+        //        {
+        //            ComplexZmanimCalendar zc = new ComplexZmanimCalendar(date, location);
+        //            DateTime dateTime = (DateTime)zc.GetSunset();
+        //            //TimeSpan time = (TimeSpan)dateTime.ToString("h:mm tt");
+        //            string time = dateTime.ToShortTimeString();
+        //            //context.Events.InsertOnSubmit(new Event
+        //            //{
+        //            //    EventName="Shkia",
+        //            //    Time = time,
+        //            //    Date=date
+        //            //});
+        //            AddEvent(new Event
+        //            {
+        //                EventName = "Shkia",
+        //                Time = time,
+        //                Date = date
+        //            });
+        //            date = date.AddDays(1);
+        //            //context.SubmitChanges();
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
     }
 }

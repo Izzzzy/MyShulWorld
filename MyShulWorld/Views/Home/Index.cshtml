@@ -1,4 +1,5 @@
-﻿@model dynamic
+﻿@model MyShulWorld.Models.IndexViewModel
+@using Zmanim.Data
 
 @{
     ViewBag.Title = "title";
@@ -6,19 +7,17 @@
 <a href="/home/SubmitEventsForYear?year=2016" class="btn btn-primary">Populate Events For 2016</a>
 <a href="/home/evententry"class="btn btn-primary">Event Entry</a>
 <a href="/home/deleteAllEventTypesAndEvents" class="btn btn-danger">Delete All Events And EventTypes</a>
-<div id="calendar"></div>
-<div class="well">
-    <h2>Add Event Type:</h2>
-    <form method="POST" action="/home/submitEventType">
-        <input type="text" name="name" placeholder="Event Name:" />
-        <select class="selectpicker form-control" name="timeType">
-            <option>Set Time</option>
-            <option>Based on Something Else</option>
-        </select>
-        <input type="text" name="fixedTime" placeholder="Time:" />
+<div id="calendar" style="margin-top: 20px; margin-bottom: 40px;"></div>
 
-    </form>
-</div>
+@if (Model.AllEventTypes != null)
+{
+    foreach (EventType et in Model.AllEventTypes)
+    {
+        <a href="/home/eventEntry?eventTypeId=@et.ID">
+            <h3>@et.Name</h3>
+        </a>
+    }
+}
 
 @*@section Scripts{
     <link rel='stylesheet' href='fullcalendar/fullcalendar.css' />

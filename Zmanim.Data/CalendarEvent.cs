@@ -10,6 +10,8 @@ namespace Zmanim.Data
     {
         public string Title { get; set; }
         public string Start { get; set; }
+        public int Id { get; set; }
+        public string Url { get; set; }
         //public string Url { get; set; }
 
     }

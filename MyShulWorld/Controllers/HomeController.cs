@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MyShulWorld.Models;
 using Zmanim.Data;
 
 namespace MyShulWorld.Controllers
@@ -11,28 +12,52 @@ namespace MyShulWorld.Controllers
     {
         public ActionResult DeleteAllEventTypesAndEvents()
         {
-            var gr=new GabbaiRepository(Properties.Settings.Default.ConStr);
+            var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
             gr.DeleteAllEventsAndEventTypes();
             return Redirect("/");
         }
-    
-        public ActionResult EventEntry()
+
+        public ActionResult EventEntry(EventType et, Event e, int? eventId,int? eventTypeId)
         {
-            return View();
+            var uvm = new UpdatesViewModel();
+
+            if (et.Name != null)
+            {
+                uvm.Et = et;
+            }
+            else if (e.EventName != null)
+            {
+                uvm.E = e;
+            }
+
+            else if (eventId != null)
+            {
+                var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
+                uvm.E = gr.GetEventById(eventId);
+            }
+
+            else if (eventTypeId != null)
+            {
+                var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
+                uvm.Et = gr.GetEventTypeById(eventTypeId);
+            }
+
+            return View(uvm);
         }
 
         public ActionResult Index()
         {
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
-            //gr.PopulateShkiaFor30Days();
-            return View();
+            var ivm=new IndexViewModel();
+            ivm.AllEventTypes = gr.GetAllEventTypes();
+            return View(ivm);
         }
 
         public ActionResult GetEvents(string start, string end)
         {
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
             var es = gr.GetEventsBetweenDates(start, end);
-            var nl = es.Select(p => new EventVM { start = p.Start, title = p.Title });
+            var nl = es.Select(p => new EventVM { start = p.Start, title = p.Title, id = p.Id, url = p.Url });
 
             return Json(nl, JsonRequestBehavior.AllowGet);
 
@@ -48,6 +73,23 @@ namespace MyShulWorld.Controllers
             return Redirect("/");
         }
 
+        //if doing this way, need to change the delete functions in repo to take in nullable int
+        public ActionResult SubmitDeletion(int? eventId,int?eventTypeId)
+        {
+            var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
+            if (eventId != null)
+            {
+               // gr.DeleteEvent(eventId);
+            }
+
+            else if (eventTypeId != null)
+            {
+               // gr.DeleteEventType(eventTypeId);
+            }
+            
+            return Redirect("/");
+        }
+
         public ActionResult SubmitDeleteEvent(int eventId)
         {
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
@@ -55,11 +97,18 @@ namespace MyShulWorld.Controllers
             return Redirect("/");
         }
 
+        public ActionResult SubmitDeleteEventType(int eventTypeId)
+        {
+            var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
+            gr.DeleteEventType(eventTypeId);
+            return Redirect("/");
+        }
+
         //public void test()//IEnumerable<string> restrictions)
         //{
         //    var x = 0;
         //}
-    
+
 
         //public ActionResult SubmitEventEntry(bool recurring, string eventName, DateTime date, bool isFixed, string time, BasedOn basedOn, int timeDifference, string identifier, DateTime startDate, DateTime endDate)
         //{
@@ -104,10 +153,9 @@ namespace MyShulWorld.Controllers
         //    return Redirect("/");
         //}
         [HttpPost]
-        public ActionResult SubmitEvent(string eventName, DateTime date, string time, BasedOn basedOn, int timeDifference)
+        public ActionResult SubmitEvent(string eventName, DateTime date, string time, BasedOn basedOn, int timeDifference,int? eventId)
         {
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
-
             var e = new Event
             {
                 EventName = eventName,
@@ -115,10 +163,21 @@ namespace MyShulWorld.Controllers
                 Time =
                     !String.IsNullOrEmpty(time)
                         ? time
-                        : gr.GetTimeBasedOnSomething(date, (int?) basedOn, timeDifference)
+                        : gr.GetTimeBasedOnSomething(date, (int?)basedOn, timeDifference)
             };
-
-            gr.AddEvent(e);
+            if (String.IsNullOrEmpty(time))
+            {
+                e.BasedOn = (int?)basedOn;
+                e.TimeDifference = timeDifference;
+            }
+            if (eventId != null)
+            {
+                gr.UpdateEvent(eventId.Value,e);
+            }
+            else
+            {
+                gr.AddEvent(e);
+            }
 
             return Redirect("/");
         }
@@ -127,9 +186,9 @@ namespace MyShulWorld.Controllers
         {
             return View();
         }
-    
-        public ActionResult SubmitEventType(string eventName, string time, DateTime? startDate, DateTime? endDate, BasedOn basedOn, int timeDifference,IEnumerable<string>restrictions,IEnumerable<string>exclusions)
-        { 
+
+        public ActionResult SubmitEventType(string eventName, string time, DateTime? startDate, DateTime? endDate, BasedOn basedOn, int timeDifference, IEnumerable<string> restrictions, IEnumerable<string> exclusions,int?eventTypeId)
+        {
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
 
             var et = new EventType
@@ -147,7 +206,14 @@ namespace MyShulWorld.Controllers
                 et.BasedOn = (int?)basedOn;
                 et.TimeDifference = timeDifference;
             }
-            gr.AddEventType(et,restrictions,exclusions);
+            if (eventTypeId != null)
+            {
+                gr.UpdateEventType(eventTypeId.Value,et,restrictions,exclusions);
+            }
+            else
+            {
+                gr.AddEventType(et, restrictions, exclusions);
+            }
 
             return Redirect("/");
         }
