@@ -251,8 +251,14 @@ $(function () {
     var exclusionCount = 2;
     var restrictArray = [];
     var excludeArray = [];
-
-    var time = $('#get-time').val();
+    var eventId = $('#eventId').val();
+    var eventTypeId = $('#eventTypeId').val();
+    //if (window.Model.Restrictions != null) {
+    //     var yourJavaScriptArray = window.Html.Raw(window.Json.Serialize(window.Model.Restrictions));
+    //alert( typeof yourJavaScriptArray);
+    //}
+    //var restArray = [Html.Raw(Json.Serialize(Model.Restrictions))];
+    var time24 = $('#time').val();
 
     console.log(time);
     //alert(typeof time);
@@ -350,14 +356,14 @@ $(function () {
         }
 
         if ($('input[name=isOneTime]:checked').val() === 'once') {
-            $.post('/home/submitEvent', { eventName: eventName, date: oneDate, time: pickedTime, basedOn: basedOn, timedifference: difference }, function () {
+            $.post('/home/submitEvent', { eventName: eventName, date: oneDate, time: pickedTime, basedOn: basedOn, timedifference: difference, eventId: eventId }, function () {
 
                 window.location = "/home/index/";
             });
         }
         if ($('input[name=isOneTime]:checked').val() === 'recurring') {
             console.log(restrictArray);
-            $.post('/home/SubmitEventType', { eventName: eventName, startDate: fromDate, endDate: toDate, time: pickedTime, BasedOn: basedOn, timeDifference: difference, restrictions: restrictArray, exclusions: excludeArray }, function () {
+            $.post('/home/SubmitEventType', { eventName: eventName, startDate: fromDate, endDate: toDate, time: pickedTime, BasedOn: basedOn, timeDifference: difference, restrictions: restrictArray, exclusions: excludeArray, eventTypeId: eventTypeId }, function () {
 
                 window.location = "/home/index/";
             });
@@ -380,13 +386,13 @@ $(function () {
         addRestriction();
         addExclusion();
     }
-
+    
     //functions
     function addRestriction() {
         $('#more-restrictions').append('<h4>Only when it falls out on:</h4>' +
            '<div style="text-align: left; width: 320px; margin-left: 173px">' +
            '<select name="restriction' + restrictionCount + '[]" multiple id="restriction' + restrictionCount + '">' +
-                '<option value="Shabbos"@Model.CheckIfSelected("Shabbos", ' + restrictionCount + ')>Shabbos</option>' +
+                '<option value="Saturday"@Model.CheckIfSelected("Shabbos", ' + restrictionCount + ')>Shabbos</option>' +
                 '<option value="YomTov" @Model.CheckIfSelected("YomTov", ' + restrictionCount + ')>Yom Tov</option>' +
                 '<option value="RoshChodesh" @Model.CheckIfSelected("RoshChodesh", ' + restrictionCount + ')>Rosh Chodesh</option>' +
                 '<option value="Taanis" @Model.CheckIfSelected("Taanis", ' + restrictionCount + ')>Taanis</option>' +
@@ -410,7 +416,7 @@ $(function () {
         $('#more-exclusions').append('<h4 style="margin-top: 20px">and only if also falls out on:</h4>' +
            '<div style="text-align: left; width: 320px; margin-left: 173px">' +
            '<select name="exclusion' + exclusionCount + '[]" multiple id="exclusion' + exclusionCount + '">' +
-           '<option value="Shabbos"@Model.CheckIfSelected("Shabbos", ' + exclusionCount + ')>Shabbos</option>' +
+           '<option value="Saturday"@Model.CheckIfSelected("Shabbos", ' + exclusionCount + ')>Shabbos</option>' +
                 '<option value="YomTov" @Model.CheckIfSelected("YomTov", ' + exclusionCount + ')>Yom Tov</option>' +
                 '<option value="RoshChodesh" @Model.CheckIfSelected("RoshChodesh", ' + exclusionCount + ')>Rosh Chodesh</option>' +
                 '<option value="Taanis" @Model.CheckIfSelected("Taanis", ' + exclusionCount + ')>Taanis</option>' +
@@ -477,7 +483,7 @@ $(function () {
     //timepicker
     var options = {
 
-        now: time, //hh:mm 24 hour format only, defaults to current time
+        now: time24, //hh:mm 24 hour format only, defaults to current time
         twentyFour: false,  //Display 24 hour format, defaults to false
         upArrow: 'wickedpicker__controls__control-up',  //The up arrow class selector to use, for custom CSS
         downArrow: 'wickedpicker__controls__control-down', //The down arrow class selector to use, for custom CSS

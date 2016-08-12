@@ -94,14 +94,21 @@ namespace Zmanim.Data
         public void UpdateEventType(int eventTypeId, EventType et, IEnumerable<string> restrictions,
             IEnumerable<string> exclusions)
         {
+            DateTime dt;
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                dt = (DateTime) context.EventTypes.FirstOrDefault(e => e.ID == eventTypeId).LastDayPopulated;
+            }
+            DeleteEvents(DateTime.Now, dt, eventTypeId);
+            DeleteRestrictionsAndExclusionsForEventType(eventTypeId);
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
                 //var events = context.Events.Where(e => e.EventTypeId == eventTypeId && e.Date > DateTime.Now);
                 //context.Events.DeleteAllOnSubmit(events);
-                DateTime dt = et.LastDayPopulated.Value;
-                DeleteEvents(DateTime.Now, et.LastDayPopulated.Value, et.ID);
-                DeleteRestrictionsAndExclusionsForEventType(et.ID);
-                EventType eventType = context.EventTypes.FirstOrDefault(e => e.ID == eventTypeId);
+                EventType eventType = context.EventTypes.Single(e => e.ID == eventTypeId);
+                //DateTime dt = eventType.LastDayPopulated.Value;
+                
+                
                 if (eventType != null)
                 {
                     eventType.Name = et.Name;
@@ -116,8 +123,8 @@ namespace Zmanim.Data
                 }
                 context.SubmitChanges();
 
-                AddRestrictionsAndExclusions(et.ID,restrictions,exclusions);
-                MakeSureEventsAreUpToDateForEventType(dt, et);
+                AddRestrictionsAndExclusions(eventTypeId,restrictions,exclusions);
+                MakeSureEventsAreUpToDateForEventType(dt, eventType);
                 
             }
         }
@@ -126,7 +133,7 @@ namespace Zmanim.Data
         {
             if (et.LastDayPopulated > date)
             {
-                DeleteEvents(et.LastDayPopulated.Value, date, et.ID);
+                DeleteEvents(date, et.LastDayPopulated.Value, et.ID);
             }
             if (et.LastDayPopulated < date)
             {
@@ -135,7 +142,7 @@ namespace Zmanim.Data
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
                 EventType eventType = context.EventTypes.FirstOrDefault(t => t.ID == et.ID);
-                eventType.LastDayPopulated = date;
+                if (eventType != null) eventType.LastDayPopulated = date;
                 context.SubmitChanges();
             }
         }
@@ -203,7 +210,9 @@ namespace Zmanim.Data
             {
                 DeleteRestrictionsAndExclusionsForEventType(eventTypeId);
 
-                context.EventTypes.DeleteOnSubmit(GetEventTypeById(eventTypeId));
+                var n = context.EventTypes.Single(et => et.ID == eventTypeId);
+
+                context.EventTypes.DeleteOnSubmit(n);
                 var events = context.Events.Where(e => e.EventTypeId == eventTypeId && e.Date > DateTime.Now);
                 context.Events.DeleteAllOnSubmit(events);
                 context.SubmitChanges();
@@ -224,7 +233,8 @@ namespace Zmanim.Data
         {
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
-                context.Events.DeleteOnSubmit(GetEventById(eventId));
+                var n = context.Events.Single(t => t.Id == eventId);
+                context.Events.DeleteOnSubmit(n);
                 context.SubmitChanges();
             }
         }
@@ -237,7 +247,7 @@ namespace Zmanim.Data
                 context.SubmitChanges();
 
                 var et = context.EventTypes.FirstOrDefault(t => t.ID == eventTypeId);
-                if (endDate >= et.LastDayPopulated.Value)
+                if (et != null && endDate >= et.LastDayPopulated.Value)
                 {
                     et.LastDayPopulated = startDate.AddDays(-1);
                     context.SubmitChanges();
@@ -249,7 +259,8 @@ namespace Zmanim.Data
         {
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
-                Event a = context.Events.FirstOrDefault(i => i.Id == eventId);
+                //Event a = context.Events.FirstOrDefault(i => i.Id == eventId);
+                Event a = context.Events.Single(i => i.Id == eventId);
                 a.EventName = e.EventName;
                 a.EventTypeId = e.EventTypeId;
                 a.Date = e.Date;
@@ -267,6 +278,21 @@ namespace Zmanim.Data
             }
         }
 
+        public List<string> GetRestrictions(int eventTypeId)
+        {
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                return context.Restrictions.Where(r => r.EventTypeId == eventTypeId).Select(re=>re.Restriction1).ToList();
+            }
+        }
+
+        public List<string> GetExclusions(int eventTypeId)
+        {
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                return context.Exclusions.Where(e => e.EventTypeId == eventTypeId).Select(re => re.Exclusion1).ToList();
+            }
+        } 
 
         public string GetTimeBasedOnSomething(DateTime date, int? basedOn, double minutesDifference)
         {

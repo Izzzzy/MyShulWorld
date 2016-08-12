@@ -8,15 +8,22 @@ namespace MyShulWorld.Models
 {
     public class UpdatesViewModel
     {
+
+
         public EventType Et { get; set; }
         public Event E { get; set; }
         public bool EventUpdate { get; set; }
         public bool EvetnTypeUpdate { get; set; }
-
+        public string TimePickerTime { get; set; }
+        private string ViewTime { get; set; }
+        private string Time24H { get; set; }
         //for testing
         public List<string> TestList { get; set; }
         public List<string> Restrictions { get; set; }
+        public string restr { get; set; }
         public List<string> Exclusions { get; set; }
+        public List<string> Foo { get; set; }
+
 
         public string EventName()
         {
@@ -111,19 +118,37 @@ namespace MyShulWorld.Models
             return null;
         }
 
-        public string Time()
+        public string Time24Func()
         {
             if (Et != null && !string.IsNullOrEmpty(Et.FixedTime))
             {
-
-                return Et.FixedTime;
+                Time24H = GetTime24H(Et.FixedTime);
+                return Time24H;
             }
             if (E != null && !string.IsNullOrEmpty(E.Time))
             {
-                return E.Time;
+                Time24H = GetTime24H(E.Time);
+                return Time24H;
+            }
+            return "12:00";
+        }
+
+        public string ViewTimeFunc()
+        {
+            if (Et != null && !string.IsNullOrEmpty(Et.FixedTime))
+            {
+                ViewTime = GetViewTime(Et.FixedTime);
+                return ViewTime;
+            }
+            if (E != null && !string.IsNullOrEmpty(E.Time))
+            {
+                ViewTime = GetViewTime(E.Time);
+                return ViewTime;
             }
             return "12 : 00 AM";
         }
+
+
 
         public int? Difference()
         {
@@ -193,7 +218,7 @@ namespace MyShulWorld.Models
 
         public string CheckIfSelected(string option, int index)
         {
-            if (Et != null)
+            if (Et != null && Restrictions != null)
             {
                 if (Restrictions[index - 1].Contains(option))
                 {
@@ -202,6 +227,68 @@ namespace MyShulWorld.Models
                 return null;
             }
             return null;
+        }
+
+        private string GetViewTime(string view)
+        {
+            string orig = view;
+            string hour = "";
+            string min = "";
+            string amPm = "";
+
+            if (orig.Length == 8)
+            {
+                hour += orig[0];
+                hour += orig[1];
+                min += orig[3];
+                min += orig[4];
+                amPm += orig[6];
+                amPm += orig[7];
+            }
+            else
+            {
+                hour += orig[0];
+                min += orig[2];
+                min += orig[3];
+                amPm += orig[5];
+                amPm += orig[6];
+            }
+            return hour + " : " + min + " " + amPm;
+        }
+
+        private string GetTime24H(string time24)
+        {
+            string orig = time24;
+            string hour = "";
+            string min = "";
+            string amPm = "";
+
+            if (orig.Length == 8)
+            {
+                hour += orig[0];
+                hour += orig[1];
+                min += orig[3];
+                min += orig[4];
+                amPm += orig[6];
+                amPm += orig[7];
+            }
+            else
+            {
+                hour += orig[0];
+                min += orig[2];
+                min += orig[3];
+                amPm += orig[5];
+                amPm += orig[6];
+            }
+
+            if (amPm == "PM")
+            {
+                return int.Parse(hour) + 12 + ":" + min;
+            }
+            else
+            {
+                return hour + ":" + min;
+            }
         }
     }
 }

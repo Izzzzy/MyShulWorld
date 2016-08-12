@@ -39,6 +39,13 @@ namespace MyShulWorld.Controllers
             else if (eventTypeId != null)
             {
                 var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
+                if (gr.GetRestrictions(eventTypeId.Value).Count > 0)
+                {
+                    uvm.Restrictions = gr.GetRestrictions(eventTypeId.Value);
+                    //uvm.restr = Json.Serialize(gr.GetRestrictions(eventTypeId.Value));
+                }
+                
+                uvm.Exclusions = gr.GetExclusions(eventTypeId.Value);
                 uvm.Et = gr.GetEventTypeById(eventTypeId);
             }
 
@@ -153,7 +160,7 @@ namespace MyShulWorld.Controllers
         //    return Redirect("/");
         //}
         [HttpPost]
-        public ActionResult SubmitEvent(string eventName, DateTime date, string time, BasedOn basedOn, int timeDifference,int? eventId)
+        public ActionResult SubmitEvent(string eventName, DateTime date, string time, BasedOn? basedOn, int timeDifference,int? eventId)
         {
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
             var e = new Event
@@ -187,7 +194,7 @@ namespace MyShulWorld.Controllers
             return View();
         }
 
-        public ActionResult SubmitEventType(string eventName, string time, DateTime? startDate, DateTime? endDate, BasedOn basedOn, int timeDifference, IEnumerable<string> restrictions, IEnumerable<string> exclusions,int?eventTypeId)
+        public ActionResult SubmitEventType(string eventName, string time, DateTime? startDate, DateTime? endDate, BasedOn? basedOn, int? timeDifference, IEnumerable<string> restrictions, IEnumerable<string> exclusions,int?eventTypeId)
         {
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
 

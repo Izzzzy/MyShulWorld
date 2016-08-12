@@ -6,7 +6,17 @@
 <button id="test">test</button>
 @if (Model.Et != null || Model.E != null)
 {
-    <h1 style="text-align: left; margin-left: 330px">Update or Edit Event</h1>
+    <div class="row">
+        <h1 style="text-align: left; margin-left: 330px">Update or Edit Event</h1>
+        @if (Model.Et != null)
+        {
+            <a href="/home/submitdeleteEventtype?eventTypeId=@Model.Et.ID" class="btn btn-danger">Delete EventType Completely</a>
+        }
+        else if (Model.E != null)
+        {
+            <a href="/home/submitdeleteEvent?eventId=@Model.E.Id" class="btn btn-danger">Delete Event Completely</a>
+        }
+    </div>
 }
 else
 {
@@ -50,7 +60,7 @@ else
         <div style="text-align: left; width: 320px; margin-left: 173px">
 
             <select name="restriction1[]" multiple id="restriction1">
-                <option value="Shabbos" @Model.CheckIfSelected("Shabbos", 1)>Shabbos</option>
+                <option value="Saturday" @Model.CheckIfSelected("Shabbos", 1)>Shabbos</option>
                 <option value="YomTov" @Model.CheckIfSelected("YomTov", 1)>Yom Tov</option>
                 <option value="RoshChodesh" @Model.CheckIfSelected("RoshChodesh", 1)>Rosh Chodesh</option>
                 <option value="Taanis" @Model.CheckIfSelected("Taanis", 1)>Taanis</option>
@@ -62,7 +72,7 @@ else
                 <option value="Friday" @Model.CheckIfSelected("Friday", 1)>Friday</option>
             </select>
         </div>
-        @if (Model.Et != null)
+        @if (Model.Et != null && Model.Restrictions != null)
         {
             <input type="hidden" id="restrictions-list" value="@Model.Restrictions.Count" />
         }
@@ -74,7 +84,7 @@ else
         <h4 style="">Excluding when this day falls out on:</h4>
         <div style="text-align: left; width: 320px; margin-left: 173px">
             <select name="exclusion1[]" multiple id="exclusion1">
-                <option value="Shabbos" @Model.CheckIfSelected("Shabbos", 1)>Shabbos</option>
+                <option value="Saturday" @Model.CheckIfSelected("Shabbos", 1)>Shabbos</option>
                 <option value="YomTov" @Model.CheckIfSelected("YomTov", 1)>Yom Tov</option>
                 <option value="RoshChodesh" @Model.CheckIfSelected("RoshChodesh", 1)>Rosh Chodesh</option>
                 <option value="Taanis" @Model.CheckIfSelected("Taanis", 1)>Taanis</option>
@@ -120,22 +130,22 @@ else
     <div id="time-pick" class="@Model.ShowTime()" style="margin-top: 30px">
         <h4>Enter the time for the event:</h4>
         <div style="margin-left: 200px">
-            <input type="text" id="timepicker" name="timepicker" value="@Model.Time()" class="timepicker form-control" style="width: 271px; border-radius: 0px; height: 30px; text-align: center" placeholder="hh : mm  am/pm">
+            @if (Model.E != null || Model.Et != null)
+            {
+                <input type="text" id="timepicker" name="timepicker" value="@Model.ViewTimeFunc()" class="timepicker form-control" style="width: 271px; border-radius: 0px; height: 30px; text-align: center" placeholder="hh : mm  am/pm">
+                <input type="hidden" id="time" value="@Model.Time24Func()" />
+            }
+            else
+            {
+                <input type="text" id="timepicker" name="timepicker" value="12 : 00 AM" class="timepicker form-control" style="width: 271px; border-radius: 0px; height: 30px; text-align: center" placeholder="hh : mm  am/pm">
+                <input type="hidden" id="time" value="12:00" />
+            }
         </div>
-        @if (Model.E != null)
-        {
-            <input type="hidden" id="get-time" value="@Model.E.Time" />
-        }
-        else
-        {
-            <input type="hidden" id="get-time" value="12:00" />
-        }
-
     </div>
     <br />
     <div id="basedon-difference" class="@Model.ShowBasedOnDifference()">
         <h4>Select what you would like to base this event on:</h4>
-        <select style="height: 26px" id="based-on-select" placeholder="sss">
+        <select style="height: 26px" id="based-on-select">
             <option value="" disabled selected>Select A Zman</option>
             <option value="3" @Model.CheckIfBasedon(3)>Alos</option>
             <option value="4" @Model.CheckIfBasedon(4)>Sof Zman Krias Shema Mg"a</option>
@@ -155,7 +165,8 @@ else
             <option value="18">18</option>
             <option value="30">30</option>
         </datalist>
-        <input type="text" style="width: 60px; text-align: center" id="minutes" list="difference" value="@Model.Difference()">
+        @*<input type="text"id="difference"placeholder="0"/>*@
+        <input type="text" placeholder="0" style="width: 60px; text-align: center" id="minutes" list="difference" value="@Model.Difference()">
         <h4 style="display: inline; margin-right: 20px">minutes</h4>
         <label class="radio-inline"><input type="radio" class="beforeAfterRdo" name="beforeAfter" value="before" @Model.RdoBefore()>Before</label>
         <label class="radio-inline"><input type="radio" class="beforeAfterRdo" name="beforeAfter" value="after" @Model.RdoAfter()>After</label>
@@ -163,7 +174,7 @@ else
     <hr style="border-color: darkcyan; border-style: dotted" />
     @if (Model.Et != null || Model.E != null)
     {
-        <button class="btn btn-primary btn-outline btn-lg" id="update">
+        <button class="btn btn-primary btn-outline btn-lg" id="enter">
             <h4>Submit Update</h4>
         </button>
     }
@@ -172,6 +183,13 @@ else
         <button class="btn btn-primary btn-outline btn-lg" id="enter">
             <h4>Submit Event</h4>
         </button>
+    }
+    @if (Model.E != null)
+    {
+        <input type="hidden" id="eventId" value="@Model.E.Id" />
+    } @if (Model.Et != null)
+    {
+        <input type="hidden" id="eventTypeId" value="@Model.Et.ID" />
     }
 
 </div>
