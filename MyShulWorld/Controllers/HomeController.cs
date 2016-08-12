@@ -39,13 +39,16 @@ namespace MyShulWorld.Controllers
             else if (eventTypeId != null)
             {
                 var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
-                if (gr.GetRestrictions(eventTypeId.Value).Count > 0)
+                if (gr.GetRestrictionsStrings(eventTypeId.Value).Count > 0)
                 {
-                    uvm.Restrictions = gr.GetRestrictions(eventTypeId.Value);
+                    uvm.RestrictionsStrings = gr.GetRestrictionsStrings(eventTypeId.Value);
                     //uvm.restr = Json.Serialize(gr.GetRestrictions(eventTypeId.Value));
                 }
+                if (gr.GetExclusionsStrings(eventTypeId.Value).Count > 0)
+                {
+                    uvm.ExclusionsStrings = gr.GetExclusionsStrings(eventTypeId.Value);
+                }
                 
-                uvm.Exclusions = gr.GetExclusions(eventTypeId.Value);
                 uvm.Et = gr.GetEventTypeById(eventTypeId);
             }
 

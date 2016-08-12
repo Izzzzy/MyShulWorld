@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Zmanim.Data;
+using Newtonsoft.Json;
 
 namespace MyShulWorld.Models
 {
@@ -12,17 +13,11 @@ namespace MyShulWorld.Models
 
         public EventType Et { get; set; }
         public Event E { get; set; }
-        public bool EventUpdate { get; set; }
-        public bool EvetnTypeUpdate { get; set; }
-        public string TimePickerTime { get; set; }
+        // public string TimePickerTime { get; set; }
         private string ViewTime { get; set; }
         private string Time24H { get; set; }
-        //for testing
-        public List<string> TestList { get; set; }
-        public List<string> Restrictions { get; set; }
-        public string restr { get; set; }
-        public List<string> Exclusions { get; set; }
-        public List<string> Foo { get; set; }
+        public List<string> RestrictionsStrings { get; set; }
+        public List<string> ExclusionsStrings { get; set; }
 
 
         public string EventName()
@@ -114,6 +109,24 @@ namespace MyShulWorld.Models
             if (E != null && E.Date != null)
             {
                 return @"value=" + E.Date + @"";
+            }
+            return null;
+        }
+
+        public string StartDate()
+        {
+            if (Et != null && Et.StartDate != null)
+            {
+                return @"value=" + Et.StartDate + @"";
+            }
+            return null;
+        }
+
+        public string EndDate()
+        {
+            if (Et != null && Et.EndDate != null)
+            {
+                return @"value=" + Et.EndDate + @"";
             }
             return null;
         }
@@ -216,11 +229,24 @@ namespace MyShulWorld.Models
             return null;
         }
 
-        public string CheckIfSelected(string option, int index)
+        public string CheckIfSelectedRest(string option, int index)
         {
-            if (Et != null && Restrictions != null)
+            if (Et != null && RestrictionsStrings != null)
             {
-                if (Restrictions[index - 1].Contains(option))
+                if (RestrictionsStrings[index - 1].Contains(option))
+                {
+                    return "selected";
+                }
+                return null;
+            }
+            return null;
+        }
+
+        public string CheckIfSelectedExc(string option, int index)
+        {
+            if (Et != null && ExclusionsStrings != null)
+            {
+                if (ExclusionsStrings[index - 1].Contains(option))
                 {
                     return "selected";
                 }
@@ -289,6 +315,31 @@ namespace MyShulWorld.Models
             {
                 return hour + ":" + min;
             }
+        }
+
+        public string RestId(int i)
+        {
+            return "rString" + i;
+        }
+
+        public string RestDivName(int i)
+        {
+            return "restriction" + i + "[]";
+        }
+
+        public string RestDivId(int i)
+        {
+            return "restriction" + i;
+        }
+
+        public string ExcDivName(int i)
+        {
+            return "exclusion" + i + "[]";
+        }
+
+        public string ExcDivId(int i)
+        {
+            return "exclusion" + i;
         }
     }
 }

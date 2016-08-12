@@ -129,20 +129,25 @@ namespace Zmanim.Data
             }
         }
 
-        private void MakeSureEventsAreUpToDateForEventType(DateTime date, EventType et)
+        private void MakeSureEventsAreUpToDateForEventType(DateTime untilDate, EventType et)
         {
-            if (et.LastDayPopulated > date)
+            if (et.LastDayPopulated > untilDate)
             {
-                DeleteEvents(date, et.LastDayPopulated.Value, et.ID);
+                if (et.LastDayPopulated != null) DeleteEvents(untilDate, et.LastDayPopulated.Value, et.ID);
             }
-            if (et.LastDayPopulated < date)
+            else
             {
-                GenerateInsertionOfEvents(et.LastDayPopulated.Value.AddDays(1), date, et);
+                if (et.LastDayPopulated != null)
+                    GenerateInsertionOfEvents(et.LastDayPopulated.Value.AddDays(1), untilDate, et);
+                else
+                {
+                    GenerateInsertionOfEvents(DateTime.Now, untilDate, et);
+                }
             }
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
                 EventType eventType = context.EventTypes.FirstOrDefault(t => t.ID == et.ID);
-                if (eventType != null) eventType.LastDayPopulated = date;
+                if (eventType != null) eventType.LastDayPopulated = untilDate;
                 context.SubmitChanges();
             }
         }
@@ -159,49 +164,10 @@ namespace Zmanim.Data
                 context.SubmitChanges();
             }
             AddRestrictionsAndExclusions(eventType.ID, restrictions, exclusions);
-            //var res = new List<Restriction>();
-            //var exc = new List<Exclusion>();
-            //if (restrictions != null)
-            //{
-            //    //res = (List<Restriction>) restrictions.Select(r => new Restriction { Restriction1 = r, EventTypeId = eventType.ID });
-            //    foreach (string s in restrictions)
-            //    {
-            //        if (!String.IsNullOrEmpty(s))
-            //        {
-            //            res.Add(new Restriction
-            //        {
-            //            Restriction1 = s,
-            //            EventTypeId = eventType.ID
-            //        });
-            //        }
-            //    }
 
-            //}
-            //if (exclusions != null)
-            //{
-            //    //exc = (List<Exclusion>) exclusions.Select(e => new Exclusion { Exclusion1 = e, EventTypeId = eventType.ID });
-
-            //    foreach (string s in exclusions)
-            //    {
-            //        if (!String.IsNullOrEmpty(s))
-            //        {
-            //            exc.Add(new Exclusion
-            //        {
-            //            Exclusion1 = s,
-            //            EventTypeId = eventType.ID
-            //        });
-            //        }
-
-            //    }
-            //}
-
-            //using (var context = new MyShulWorldDBDataContext(_connectionString))
-            //{
-            //    context.Restrictions.InsertAllOnSubmit(res);
-            //    context.Exclusions.InsertAllOnSubmit(exc);
-            //    context.SubmitChanges();
-            //}
-            MakeSureEventsAreUpToDateForEventType(DateTime.Now, eventType);
+            //will change first parameter to an arbitrary one when integrating with main project. 
+            //Will store a untilDateTime in user account and make sure always up-to-date
+            MakeSureEventsAreUpToDateForEventType(DateTime.Parse("2017-12-31"), eventType);
         }
 
         public void DeleteEventType(int eventTypeId)
@@ -278,7 +244,7 @@ namespace Zmanim.Data
             }
         }
 
-        public List<string> GetRestrictions(int eventTypeId)
+        public List<string> GetRestrictionsStrings(int eventTypeId)
         {
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
@@ -286,7 +252,7 @@ namespace Zmanim.Data
             }
         }
 
-        public List<string> GetExclusions(int eventTypeId)
+        public List<string> GetExclusionsStrings(int eventTypeId)
         {
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
@@ -493,7 +459,7 @@ namespace Zmanim.Data
                 types.Add("TishaB'av");
             }
             //might not be so efficient
-            if (itemsForDate.Any(i => i.Memo.Contains("fast") && i.Title != "Yom Kippur" && i.Memo != "Fast of the First Born"))
+            if (itemsForDate.Any(i => (i.Memo.Contains("fast") || i.Memo.Contains("Fast")) && i.Title != "Yom Kippur" && i.Memo != "Fast of the First Born" && i.Title != "Erev Tish'a B'Av"))
             {
                 types.Add("Taanis");
             }
