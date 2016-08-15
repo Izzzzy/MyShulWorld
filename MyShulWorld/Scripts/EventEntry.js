@@ -105,14 +105,14 @@
         }
 
         if ($('input[name=isOneTime]:checked').val() === 'once') {
-            $.post('/home/submitEvent', { Id: eventId, eventName: eventName, date: oneDate, time: pickedTime, basedOn: basedOn, timedifference: difference }, function () {
+            $.post('/home/submitEvent', { eventId: eventId, eventName: eventName, date: oneDate, time: pickedTime, basedOn: basedOn, timedifference: difference }, function () {
 
                 window.location = "/home/index/";
             });
         }
         if ($('input[name=isOneTime]:checked').val() === 'recurring') {
             //console.log(restrictArray);
-            $.post('/home/SubmitEventType', { ID: eventTypeId, eventName: eventName, startDate: fromDate, endDate: toDate, time: pickedTime, BasedOn: basedOn, timeDifference: difference, restrictions: restrictArray, exclusions: excludeArray }, function () {
+            $.post('/home/SubmitEventType', { eventTypeId: eventTypeId, eventName: eventName, startDate: fromDate, endDate: toDate, time: pickedTime, BasedOn: basedOn, timeDifference: difference, restrictions: restrictArray, exclusions: excludeArray }, function () {
 
                 window.location = "/home/index/";
             });
