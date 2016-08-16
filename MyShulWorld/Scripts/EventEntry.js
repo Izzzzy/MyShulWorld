@@ -88,6 +88,8 @@
 
         if ($('input[name=ifFixed]:checked').val() === 'fixed') {
             pickedTime = $('#timepicker').val();
+            pickedTime = pickedTime.replace(' ', '');
+            pickedTime = pickedTime.replace(' ', '');
             //difference = 0;
             //basedOn = $('#based-on-select').val();
             $('.beforeAfterRdo').prop('checked', false);

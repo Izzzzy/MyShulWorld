@@ -143,7 +143,7 @@ namespace MyShulWorld.Models
                 Time24H = GetTime24H(E.Time);
                 return Time24H;
             }
-            return "12:00";
+            return "00:00";
         }
 
         public string ViewTimeFunc()
@@ -307,14 +307,15 @@ namespace MyShulWorld.Models
                 amPm += orig[6];
             }
 
-            if (amPm == "PM")
+            if (amPm == "PM" && int.Parse(hour) < 12)
             {
                 return int.Parse(hour) + 12 + ":" + min;
-            }
-            else
+            } 
+            if (amPm == "AM" && int.Parse(hour) == 12)
             {
-                return hour + ":" + min;
-            }
+                return "00:" + min;
+            } 
+            return hour + ":" + min;
         }
 
         public string RestId(int i)

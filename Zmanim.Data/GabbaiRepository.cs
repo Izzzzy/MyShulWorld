@@ -21,6 +21,7 @@ namespace Zmanim.Data
             _connectionString = cn;
         }
 
+        //for testing
         public void DeleteAllEventsAndEventTypes()
         {
             using (var context = new MyShulWorldDBDataContext(_connectionString))
@@ -34,15 +35,32 @@ namespace Zmanim.Data
             }
         }
 
-        
-        private void DeleteRestrictionsAndExclusionsForEventType(int eventTypeId)
+        //add
+        public void AddEvent(Event e)
         {
             using (var context = new MyShulWorldDBDataContext(_connectionString))
             {
-                context.Restrictions.DeleteAllOnSubmit(context.Restrictions.Where(r => r.EventTypeId == eventTypeId));
-                context.Exclusions.DeleteAllOnSubmit(context.Exclusions.Where(e => e.EventTypeId == eventTypeId));
+                context.Events.InsertOnSubmit(e);
                 context.SubmitChanges();
             }
+        }
+
+        public void AddEventType(EventType eventType, IEnumerable<string> restrictions, IEnumerable<string> exclusions)
+        {
+            if (eventType.StartDate == null)
+            {
+                eventType.StartDate = DateTime.Now;
+            }
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                context.EventTypes.InsertOnSubmit(eventType);
+                context.SubmitChanges();
+            }
+            AddRestrictionsAndExclusions(eventType.ID, restrictions, exclusions);
+
+            //will change first parameter to an arbitrary one when integrating with main project. 
+            //Will store a untilDateTime in user account and make sure always up-to-date
+            MakeSureEventsAreUpToDateForEventType(DateTime.Parse("2017-12-31"), eventType);
         }
 
         private void AddRestrictionsAndExclusions(int eventTypeId, IEnumerable<string> restrictions,
@@ -87,6 +105,75 @@ namespace Zmanim.Data
             {
                 context.Restrictions.InsertAllOnSubmit(res);
                 context.Exclusions.InsertAllOnSubmit(exc);
+                context.SubmitChanges();
+            }
+        }
+
+        //delete
+        public void DeleteEvent(int eventId)
+        {
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                var n = context.Events.Single(t => t.Id == eventId);
+                context.Events.DeleteOnSubmit(n);
+                context.SubmitChanges();
+            }
+        }
+
+
+        private void DeleteEvents(DateTime startDate, DateTime endDate, int eventTypeId)
+        {
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                context.Events.DeleteAllOnSubmit(context.Events.Where(e => e.EventTypeId == eventTypeId && e.Date >= startDate && e.Date <= endDate));
+                context.SubmitChanges();
+
+                var et = context.EventTypes.FirstOrDefault(t => t.ID == eventTypeId);
+                if (et != null && endDate >= et.LastDayPopulated.Value)
+                {
+                    et.LastDayPopulated = startDate.AddDays(-1);
+                    context.SubmitChanges();
+                }
+            }
+        }
+
+
+        public void DeleteEventType(int eventTypeId)
+        {
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                DeleteRestrictionsAndExclusionsForEventType(eventTypeId);
+
+                var n = context.EventTypes.Single(et => et.ID == eventTypeId);
+
+                context.EventTypes.DeleteOnSubmit(n);
+                var events = context.Events.Where(e => e.EventTypeId == eventTypeId && e.Date > DateTime.Now);
+                context.Events.DeleteAllOnSubmit(events);
+                context.SubmitChanges();
+            }
+        }
+
+        private void DeleteRestrictionsAndExclusionsForEventType(int eventTypeId)
+        {
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                context.Restrictions.DeleteAllOnSubmit(context.Restrictions.Where(r => r.EventTypeId == eventTypeId));
+                context.Exclusions.DeleteAllOnSubmit(context.Exclusions.Where(e => e.EventTypeId == eventTypeId));
+                context.SubmitChanges();
+            }
+        }
+
+        //update
+        public void UpdateEvent(int eventId, Event e)
+        {
+            using (var context = new MyShulWorldDBDataContext(_connectionString))
+            {
+                //Event a = context.Events.FirstOrDefault(i => i.Id == eventId);
+                Event a = context.Events.Single(i => i.Id == eventId);
+                a.EventName = e.EventName;
+                a.EventTypeId = e.EventTypeId;
+                a.Date = e.Date;
+                a.Time = e.Time;
                 context.SubmitChanges();
             }
         }
@@ -152,88 +239,7 @@ namespace Zmanim.Data
             }
         }
 
-        public void AddEventType(EventType eventType, IEnumerable<string> restrictions, IEnumerable<string> exclusions)
-        {
-            if (eventType.StartDate == null)
-            {
-                eventType.StartDate = DateTime.Now;
-            }
-            using (var context = new MyShulWorldDBDataContext(_connectionString))
-            {
-                context.EventTypes.InsertOnSubmit(eventType);
-                context.SubmitChanges();
-            }
-            AddRestrictionsAndExclusions(eventType.ID, restrictions, exclusions);
-
-            //will change first parameter to an arbitrary one when integrating with main project. 
-            //Will store a untilDateTime in user account and make sure always up-to-date
-            MakeSureEventsAreUpToDateForEventType(DateTime.Parse("2017-12-31"), eventType);
-        }
-
-        public void DeleteEventType(int eventTypeId)
-        {
-            using (var context = new MyShulWorldDBDataContext(_connectionString))
-            {
-                DeleteRestrictionsAndExclusionsForEventType(eventTypeId);
-
-                var n = context.EventTypes.Single(et => et.ID == eventTypeId);
-
-                context.EventTypes.DeleteOnSubmit(n);
-                var events = context.Events.Where(e => e.EventTypeId == eventTypeId && e.Date > DateTime.Now);
-                context.Events.DeleteAllOnSubmit(events);
-                context.SubmitChanges();
-            }
-        }
-
-
-        public void AddEvent(Event e)
-        {
-            using (var context = new MyShulWorldDBDataContext(_connectionString))
-            {
-                context.Events.InsertOnSubmit(e);
-                context.SubmitChanges();
-            }
-        }
-
-        public void DeleteEvent(int eventId)
-        {
-            using (var context = new MyShulWorldDBDataContext(_connectionString))
-            {
-                var n = context.Events.Single(t => t.Id == eventId);
-                context.Events.DeleteOnSubmit(n);
-                context.SubmitChanges();
-            }
-        }
-
-        private void DeleteEvents(DateTime startDate, DateTime endDate, int eventTypeId)
-        {
-            using (var context = new MyShulWorldDBDataContext(_connectionString))
-            {
-                context.Events.DeleteAllOnSubmit(context.Events.Where(e => e.EventTypeId == eventTypeId && e.Date >= startDate && e.Date <= endDate));
-                context.SubmitChanges();
-
-                var et = context.EventTypes.FirstOrDefault(t => t.ID == eventTypeId);
-                if (et != null && endDate >= et.LastDayPopulated.Value)
-                {
-                    et.LastDayPopulated = startDate.AddDays(-1);
-                    context.SubmitChanges();
-                }
-            }
-        }
-
-        public void UpdateEvent(int eventId, Event e)
-        {
-            using (var context = new MyShulWorldDBDataContext(_connectionString))
-            {
-                //Event a = context.Events.FirstOrDefault(i => i.Id == eventId);
-                Event a = context.Events.Single(i => i.Id == eventId);
-                a.EventName = e.EventName;
-                a.EventTypeId = e.EventTypeId;
-                a.Date = e.Date;
-                a.Time = e.Time;
-                context.SubmitChanges();
-            }
-        }
+        
 
 
         private EventType GetEventTypeById(int eventTypeId)

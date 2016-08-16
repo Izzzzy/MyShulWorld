@@ -162,7 +162,7 @@ namespace MyShulWorld.Controllers
         //    }
         //    return Redirect("/");
         //}
-        [HttpPost]
+        //[HttpPost]
         public ActionResult SubmitEvent(string eventName, DateTime date, string time, BasedOn? basedOn, int timeDifference,int? eventId)
         {
             var gr = new GabbaiRepository(Properties.Settings.Default.ConStr);
