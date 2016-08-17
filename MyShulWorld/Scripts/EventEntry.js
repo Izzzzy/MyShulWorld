@@ -69,6 +69,70 @@
         addExclusion();
     });
 
+    //$('#enter').click(function () {
+    //    eventName = $('#event').val();
+
+    //    if ($('input[name=isOneTime]:checked').val() === 'recurring') {
+    //        fromDate = $('#from').val();
+    //        toDate = $('#to').val();
+    //        for (var i = 1; i < restrictionCount; i++) {
+    //            restrictArray.push(myRestrict(i));
+    //        }
+    //        for (var b = 1; b < exclusionCount; b++) {
+    //            excludeArray.push(myExclude(b));
+    //        }
+    //        endDateValidator();
+    //    } else {
+    //        oneDate = $('#date').val();
+    //    }
+
+    //    if ($('input[name=ifFixed]:checked').val() === 'fixed') {
+    //        pickedTime = $('#timepicker').val();
+    //        pickedTime = pickedTime.replace(' ', '');
+    //        pickedTime = pickedTime.replace(' ', '');
+    //        difference = 0;
+    //        //basedOn = $('#based-on-select').val();
+    //        $('.beforeAfterRdo').prop('checked', false);
+    //    } else if ($('input[name=ifFixed]:checked').val() === "not-fixed") {
+    //        basedOn = $('#based-on-select').val();
+    //        if ($('input[name=beforeAfter]:checked').val() === 'before') {
+    //            difference = -$('#minutes').val();
+    //        } else {
+    //            difference = $('#minutes').val();
+    //        }
+    //    }
+
+    //    if (difference === '') {
+    //        difference = 0;
+    //    }
+
+    //    if ($('input[name=isOneTime]:checked').val() === 'once') {
+    //        $.post('/home/submitEvent', { eventId: eventId, eventName: eventName, date: oneDate, time: pickedTime, basedOn: basedOn, timedifference: difference }, function () {
+
+    //            window.location = "/home/index/";
+    //        });
+    //    }
+    //    if ($('input[name=isOneTime]:checked').val() === 'recurring') {
+    //        //console.log(restrictArray);
+    //        $.post('/home/SubmitEventType', { eventTypeId: eventTypeId, eventName: eventName, startDate: fromDate, endDate: toDate, time: pickedTime, BasedOn: basedOn, timeDifference: difference, restrictions: restrictArray, exclusions: excludeArray }, function () {
+
+    //            window.location = "/home/index/";
+    //        });
+    //    }
+    //    eventName = '',
+    //    oneDate = '',
+    //    fromDate = '',
+    //    toDate = '',
+    //    pickedTime = '',
+    //    basedOn = '',
+    //    difference = '',
+    //    restrictionCount = 2,
+    //    exclusionCount = 2,
+    //    excludeArray = [];
+    //    restrictArray = [];
+    //});
+
+
     $('#enter').click(function () {
         eventName = $('#event').val();
 
@@ -90,7 +154,7 @@
             pickedTime = $('#timepicker').val();
             pickedTime = pickedTime.replace(' ', '');
             pickedTime = pickedTime.replace(' ', '');
-            //difference = 0;
+            difference = 0;
             //basedOn = $('#based-on-select').val();
             $('.beforeAfterRdo').prop('checked', false);
         } else if ($('input[name=ifFixed]:checked').val() === "not-fixed") {
@@ -106,15 +170,30 @@
             difference = 0;
         }
 
-        if ($('input[name=isOneTime]:checked').val() === 'once') {
-            $.post('/home/submitEvent', { eventId: eventId, eventName: eventName, date: oneDate, time: pickedTime, basedOn: basedOn, timedifference: difference }, function () {
-
-                window.location = "/home/index/";
-            });
-        }
         if ($('input[name=isOneTime]:checked').val() === 'recurring') {
-            //console.log(restrictArray);
-            $.post('/home/SubmitEventType', { eventTypeId: eventTypeId, eventName: eventName, startDate: fromDate, endDate: toDate, time: pickedTime, BasedOn: basedOn, timeDifference: difference, restrictions: restrictArray, exclusions: excludeArray }, function () {
+            if (eventName === '' && pickedTime === '' && basedOn === '') {
+                alert('You must select or enter a "name" and a "time" for this event');
+            } else if (eventName === '') {
+                alert('You must select or enter a "name" for this event');
+            } else if (pickedTime === '' && basedOn === '') {
+                alert('You must select or enter a "time" for this event');
+            } else {
+                $.post('/home/SubmitEventType', { eventTypeId: eventTypeId, eventName: eventName, startDate: fromDate, endDate: toDate, time: pickedTime, BasedOn: basedOn, timeDifference: difference, restrictions: restrictArray, exclusions: excludeArray }, function () {
+                    abc('#enter');
+                    window.location = "/home/index/";
+                });
+            }
+
+        }
+        if ($('input[name=isOneTime]:checked').val() === 'once') {
+            if (eventName === '') {
+                alert('You must select or enter a "name" for this event');
+            } else if (oneDate === '') {
+                alert('You must select or enter a "date" for this event');
+            } else if (pickedTime === '' && basedOn === '') {
+                alert('You must select or enter a "time" for this event');
+            }
+            $.post('/home/submitEvent', { eventId: eventId, eventName: eventName, date: oneDate, time: pickedTime, basedOn: basedOn, timedifference: difference }, function () {
 
                 window.location = "/home/index/";
             });
@@ -131,6 +210,7 @@
         excludeArray = [];
         restrictArray = [];
     });
+
 
     //restrictions update preload
     for (var h = 2; h <= $('#restrictions-list').val() ; h++) {
@@ -265,5 +345,12 @@
     $(".datepicker").datepicker({
         minDate: new Date($.now())
     });
+
+    function abc(this1) {
+        //alert('asdasd');
+        this1.disabled = true;
+        this1.innerHTML = 'Processing…';
+
+    }
 
 });
