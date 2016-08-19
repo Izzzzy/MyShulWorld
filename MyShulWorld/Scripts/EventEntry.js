@@ -178,8 +178,8 @@
             } else if (pickedTime === '' && basedOn === '') {
                 alert('You must select or enter a "time" for this event');
             } else {
+                DisableButton($('#enter'));
                 $.post('/home/SubmitEventType', { eventTypeId: eventTypeId, eventName: eventName, startDate: fromDate, endDate: toDate, time: pickedTime, BasedOn: basedOn, timeDifference: difference, restrictions: restrictArray, exclusions: excludeArray }, function () {
-                    abc('#enter');
                     window.location = "/home/index/";
                 });
             }
@@ -193,6 +193,7 @@
             } else if (pickedTime === '' && basedOn === '') {
                 alert('You must select or enter a "time" for this event');
             }
+            DisableButton($('#enter'));
             $.post('/home/submitEvent', { eventId: eventId, eventName: eventName, date: oneDate, time: pickedTime, basedOn: basedOn, timedifference: difference }, function () {
 
                 window.location = "/home/index/";
@@ -346,10 +347,10 @@
         minDate: new Date($.now())
     });
 
-    function abc(this1) {
+    function DisableButton(this1) {
         //alert('asdasd');
-        this1.disabled = true;
-        this1.innerHTML = 'Processing…';
+        this1.prop("disabled", true);
+        this1.text('Processing...');
 
     }
 
